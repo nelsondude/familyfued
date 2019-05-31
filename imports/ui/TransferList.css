@@ -1,3 +1,9 @@
 .TransferList button {
     margin: 10px;
 }
+
+.TransferList .itemtext {
+    transform: translateY(-6px);
+    display: inline-block;
+}
+
