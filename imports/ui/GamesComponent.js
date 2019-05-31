@@ -1,18 +1,17 @@
 import React from 'react';
-import Col from "react-bootstrap/Col";
 import {withTracker} from "meteor/react-meteor-data";
 import {Games} from '../api/links';
 import { Link } from 'react-router-dom'
-import Row from "react-bootstrap/Row";
+import Grid from "@material-ui/core/Grid";
 
 
 class GamesComponent extends React.Component {
   renderGames = () => {
     return this.props.games.map((game, i) => {
       return (
-        <Col sm={6}>
-          <h1>{game.text}</h1>
-        </Col>
+        <Grid item sm={6}>
+          <h1>{game.title}</h1>
+        </Grid>
       )
     })
   };
@@ -21,12 +20,12 @@ class GamesComponent extends React.Component {
     const games = this.renderGames();
     return (
       <div>
-        {games.length > 0 ? games : <h3>You havent created any games.</h3>}
-        <Row>
-          <Col>
+        {games.length > 0 ? <Grid container>{games}</Grid> : <h3>You havent created any games.</h3>}
+        <Grid container>
+          <Grid item xs={12}>
             <Link to={'/games/new'}>New Game</Link>
-          </Col>
-        </Row>
+          </Grid>
+        </Grid>
       </div>
     )
   }

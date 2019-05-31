@@ -1,8 +1,11 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import TransferList from './TransferList';
 import Button from "@material-ui/core/Button";
 import TextField from '@material-ui/core/TextField';
 import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
+import NewQuestion from './NewQuestion';
+import * as _ from 'lodash';
+import {Games} from "../api/links";
 
 
 class NewGame extends React.Component {
@@ -41,8 +44,14 @@ class NewGame extends React.Component {
     if (event) event.preventDefault();
     this.validateForm();
     this.setState({showErrors: true});
-    if (this.state.validation_errors.keys().length > 0) return null;
+    if (Object.keys(this.state.validation_errors).length > 0) return null;
     // continue submitting the form
+    Games.insert({
+      user_id: Meteor.userId(),
+      title: this.state.title,
+      regular_questions: _.map(this.state.regular_questions, '_id'),
+      fast_money_questions: _.map(this.state.fast_money_questions, '_id')
+    })
   };
 
   handleRegularChange = selected => {
@@ -55,31 +64,33 @@ class NewGame extends React.Component {
 
   render() {
     return (
-      <ValidatorForm
-        ref="form"
-        onSubmit={this.handleSubmit}
-        onError={errors => console.log(errors)}
-      >
-        <TextValidator
-          label="Title"
-          onChange={this.handleChange}
-          name="title"
-          value={this.state.title}
-          validators={['required']}
-          errorMessages={['this field is required']}
-        />
-        <h4>Regular Questions</h4>
-        <TransferList setSelected={this.handleRegularChange.bind(this)}/>
-        {this.state.showErrors ? <p className={"warning"}>{this.state.validation_errors.regular || ""}</p> : null}
-        <br/>
+      <Fragment>
+        <NewQuestion/>
+        <ValidatorForm
+          ref="form"
+          onSubmit={this.handleSubmit}
+          onError={errors => console.log(errors)}
+        >
+          <TextValidator
+            label="Title"
+            onChange={this.handleChange}
+            name="title"
+            value={this.state.title}
+            validators={['required']}
+            errorMessages={['this field is required']}
+          />
+          <h4>Regular Questions</h4>
+          <TransferList setSelected={this.handleRegularChange.bind(this)}/>
+          {this.state.showErrors ? <p className={"warning"}>{this.state.validation_errors.regular || ""}</p> : null}
+          <br/>
 
-        <h4>Fast Money Questions (must be 5)</h4>
-        <TransferList setSelected={this.handleFastChange.bind(this)}/>
-        {this.state.showErrors ? <p className={"warning"}>{this.state.validation_errors.fast || ""}</p> : null}
-        <br/>
-
-        <Button type={"submit"}>Create Game</Button>
-      </ValidatorForm>
+          <h4>Fast Money Questions (must be 5)</h4>
+          <TransferList setSelected={this.handleFastChange.bind(this)}/>
+          {this.state.showErrors ? <p className={"warning"}>{this.state.validation_errors.fast || ""}</p> : null}
+          <br/>
+          <Button type={"submit"}>Create Game</Button>
+        </ValidatorForm>
+      </Fragment>
     )
   }
 }

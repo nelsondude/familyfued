@@ -12,6 +12,8 @@
     "@material-ui/core": "^4.0.1",
     "@material-ui/icons": "^4.0.1",
     "array-move": "^2.1.0",
+    "bcrypt": "^3.0.6",
+    "lodash": "^4.17.11",
     "meteor-node-stubs": "^0.4.1",
     "react": "^16.5.0",
     "react-bootstrap": "^1.0.0-beta.8",
