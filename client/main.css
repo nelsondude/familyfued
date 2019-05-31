@@ -6,3 +6,8 @@ body {
 li {
   list-style: none;
 }
+
+.warning {
+  color: #f44336;
+  font-size: 12px;
+}

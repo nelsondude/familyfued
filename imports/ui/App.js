@@ -12,9 +12,9 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <AccountsUIWrapper/>
+        <AccountsUIWrapper/> &nbsp;&nbsp;
         <Link to={'/'}>Home</Link>
-        <h1>Welcome to Meteor!</h1>
+        <hr/>
         {this.props.currentUser ?
           <Switch>
             <Route path="/" exact component={GamesComponent}/>

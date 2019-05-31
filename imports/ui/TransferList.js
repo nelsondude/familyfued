@@ -71,7 +71,7 @@ class TransferList extends React.Component {
     this.setState({
       right: right.concat(left),
       left: []
-    })
+    }, this.props.setSelected(right.concat(left)))
   };
 
   handleCheckedRight = () => {
@@ -81,7 +81,7 @@ class TransferList extends React.Component {
       right: right.concat(leftChecked),
       left: not(left, leftChecked),
       checked: not(checked, leftChecked)
-    })
+    }, this.props.setSelected(right.concat(leftChecked)));
   };
 
   handleCheckedLeft = () => {
@@ -92,7 +92,7 @@ class TransferList extends React.Component {
       left: left.concat(rightChecked),
       right: not(right, rightChecked),
       checked: not(checked, rightChecked)
-    })
+    }, this.props.setSelected(not(right, rightChecked)));
   };
 
   handleAllLeft = () => {
@@ -100,7 +100,7 @@ class TransferList extends React.Component {
     this.setState({
       left: left.concat(right),
       right: []
-    })
+    }, this.props.setSelected([]));
   };
 
   leftList = (items) => (
