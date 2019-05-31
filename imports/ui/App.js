@@ -1,9 +1,11 @@
 import React from 'react';
-import Game from './Game';
 import AccountsUIWrapper from './AccountsUIWrapper.js';
 import {Meteor} from 'meteor/meteor';
 import {withTracker} from "meteor/react-meteor-data";
-import {Questions} from "../api/links";
+import {Route, Switch} from "react-router";
+import NewGameComponent from "./NewGame";
+import GamesComponent from './GamesComponent';
+import {Link} from "react-router-dom";
 
 
 class App extends React.Component {
@@ -11,8 +13,15 @@ class App extends React.Component {
     return (
       <div>
         <AccountsUIWrapper/>
+        <Link to={'/'}>Home</Link>
         <h1>Welcome to Meteor!</h1>
-        {this.props.currentUser ? <Game/> : <h2>Login to Play!</h2>}
+        {this.props.currentUser ?
+          <Switch>
+            <Route path="/" exact component={GamesComponent}/>
+            <Route path="/games/new" component={NewGameComponent}/>
+          </Switch>
+          :
+          <h2>Login to Play!</h2>}
       </div>
     )
   }

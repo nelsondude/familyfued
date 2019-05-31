@@ -1,6 +1,11 @@
 import React, {Fragment} from 'react';
 import {Questions} from '../api/links';
+import {Games} from '../api/links';
 import { withTracker } from 'meteor/react-meteor-data';
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+import {Route, Switch} from "react-router";
+import NewGame from './NewGame';
 
 
 class Game extends React.Component {
@@ -17,19 +22,17 @@ class Game extends React.Component {
   };
 
   render() {
-    const question = this.renderQuestion();
     return (
-      <div>
-        <h1>Questions Here</h1>
-        {question}
-      </div>
+      <Switch>
+        <Route path="/" exact component={Games} />
+        <Route path="/games/new" component={NewGame} />
+      </Switch>
     )
   }
 }
 
-
 export default withTracker(() => {
   return {
-    questions: Questions.find().fetch()
+    // games: Games.find({user_id: Meteor.userId()}).fetch()
   }
 })(Game);
