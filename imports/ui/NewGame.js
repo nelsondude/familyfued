@@ -6,6 +6,7 @@ import NewQuestion from './NewQuestion';
 import * as _ from 'lodash';
 import {Games} from "../api/links";
 import { withRouter } from 'react-router-dom'
+import {Prompt} from "react-router";
 
 
 class NewGame extends React.Component {
@@ -20,6 +21,17 @@ class NewGame extends React.Component {
   handleChange = event => {
     this.setState({title: event.target.value})
   };
+
+  formIsEmpty = () => {
+    const {title, regular_questions, fast_money_questions} = this.state;
+    return (!title && regular_questions.length === 0 && fast_money_questions.length === 0);
+  };
+
+
+  formIsComplete = () => {
+    const {title, regular_questions, fast_money_questions} = this.state;
+    return (title && regular_questions.length === 10 && fast_money_questions.length === 5);
+  }
 
   validateForm = () => {
     this.setState({validation_errors: {}}, () => {
@@ -67,6 +79,12 @@ class NewGame extends React.Component {
   render() {
     return (
       <Fragment>
+        <Prompt
+          when={!this.formIsEmpty() && !this.formIsComplete()}
+          message={location =>
+            `You have started a game. Are you sure you want to leave?`
+          }
+        />
         <NewQuestion/>
         <ValidatorForm
           ref="form"
