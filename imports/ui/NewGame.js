@@ -1,11 +1,11 @@
 import React, {Fragment} from 'react';
 import TransferList from './TransferList';
 import Button from "@material-ui/core/Button";
-import TextField from '@material-ui/core/TextField';
 import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
 import NewQuestion from './NewQuestion';
 import * as _ from 'lodash';
 import {Games} from "../api/links";
+import { withRouter } from 'react-router-dom'
 
 
 class NewGame extends React.Component {
@@ -51,6 +51,8 @@ class NewGame extends React.Component {
       title: this.state.title,
       regular_questions: _.map(this.state.regular_questions, '_id'),
       fast_money_questions: _.map(this.state.fast_money_questions, '_id')
+    }, () => {
+      this.props.history.push('/');
     })
   };
 
@@ -95,4 +97,4 @@ class NewGame extends React.Component {
   }
 }
 
-export default NewGame;
+export default withRouter(NewGame);

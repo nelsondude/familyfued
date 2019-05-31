@@ -7,3 +7,7 @@
     display: inline-block;
 }
 
+.TransferList .scrolling-list {
+    max-height: 450px;
+    overflow: scroll;
+}

@@ -27,12 +27,20 @@ class NewQuestion extends React.Component {
     this.setState({open: false})
   };
 
-
   handleSubmit = (e) => {
     e.preventDefault();
-    console.log('submitting');
-    Questions.insert({ text: this.state.question, answers: [...this.state.responses] });
-  }
+    if (this.state.responses.length === 0) {
+      // Add validator message here
+      return null;
+    }
+    if (this.state.responses.length > 8) {
+      // Add validator message here
+      return null;
+    }
+    Questions.insert({ text: this.state.question, answers: [...this.state.responses] }, () => {
+      this.handleClose();
+    });
+  };
 
   addResponse = () => {
     this.setState({responses: [...this.state.responses, {answer: "Bananas", responses: 10}]})
@@ -98,7 +106,6 @@ class NewQuestion extends React.Component {
                       required
                       id="answer"
                       label="Required"
-                      defaultValue="Bananas"
                       margin="normal"
                       value={response.answer}
                       onChange={this.handleAnswerChange.bind(this, i)}
@@ -108,7 +115,6 @@ class NewQuestion extends React.Component {
                       type="number"
                       id="num-responses"
                       label="Required"
-                      defaultValue="10"
                       margin="normal"
                       value={response.responses}
                       onChange={this.handleResponsesChange.bind(this, i)}
@@ -122,6 +128,8 @@ class NewQuestion extends React.Component {
               <Fab color="primary" aria-label="Add" onClick={this.addResponse}>
                 <AddIcon />
               </Fab>
+              <br/>
+              <br/>
               <Button type={"submit"}>Create Question</Button>
             </ValidatorForm>
           </div>
