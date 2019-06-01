@@ -1,31 +1,50 @@
 import { Meteor } from 'meteor/meteor';
-import {Links} from '/imports/api/links';
+import {Games, Questions} from '/imports/api/links';
 
 function insertLink(title, url) {
   Links.insert({ title, url, createdAt: new Date() });
 }
 
 Meteor.startup(() => {
-  // If the Links collection is empty, add some data.
-  if (Links.find().count() === 0) {
-    insertLink(
-      'Do the Tutorial',
-      'https://www.meteor.com/tutorials/react/creating-an-app'
-    );
-
-    insertLink(
-      'Follow the Guide',
-      'http://guide.meteor.com'
-    );
-
-    insertLink(
-      'Read the Doc',
-      'https://docs.meteor.com'
-    );
-
-    insertLink(
-      'Discussions',
-      'https://forums.meteor.com'
-    );
-  }
+  Meteor.methods({
+    async join_questions(game_id) {
+      const pipeline = [
+        {$match: {_id: game_id}},
+        {$unwind: "$regular_questions"},
+        {
+          $lookup: {
+            from: 'questions',
+            localField: 'regular_questions',
+            foreignField: '_id',
+            as: 'question'
+          }
+        },
+        {
+          $project: {
+            title: 1,
+            question: {$arrayElemAt: ["$question", 0]}
+          }
+        },
+        {
+          $group: {
+            _id: {_id: "$_id", title: "$title"},
+            questions: {$push: "$question"}
+          }
+        },
+        {
+          $project: {
+            questions: 1,
+            _id: "$_id._id",
+            title: "$_id.title"
+          }
+        }
+      ];
+      return await Games.rawCollection().aggregate(
+        pipeline
+      ).toArray(); // get first element
+    }
+  });
 });
+
+
+// {$sort: {_id: -1}}
