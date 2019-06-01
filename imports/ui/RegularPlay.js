@@ -12,18 +12,27 @@ class GameBoard extends React.Component {
   }
 
   componentDidMount() {
-  }
-
-  componentWillReceiveProps(nextProps, nextContext) {
     this.setState({
       answers: _.map(this.props.answers, (element, i) => ({...element, show: false, index: i}))
     });
   }
 
+  componentWillReceiveProps(nextProps, nextContext) {
+    if (!_.isEqual(nextProps.answers, this.props.answers)) {
+      this.setState({
+        answers: _.map(nextProps.answers, (element, i) => ({...element, show: false, index: i}))
+      });
+    }
+  }
+
   toggleAnswer = (i) => {
     let new_answers = [...this.state.answers];
     new_answers[i].show = !new_answers[i].show;
-    this.setState({answers: new_answers});
+    this.setState({answers: new_answers}, () => {
+      const filtered = new_answers.filter(value => value.show === true);
+      const summed = filtered.reduce((prev,next) => prev + next.responses,0);
+      this.props.sendSumValue(summed);
+    });
   };
 
   renderPanelColumn = (answers) => {
@@ -45,7 +54,7 @@ class GameBoard extends React.Component {
         )
       })
     )
-  }
+  };
 
   render() {
     const first_five = this.state.answers.slice(0, 5);
@@ -71,7 +80,8 @@ class RegularPlay extends React.Component {
     question: {},
     title: "",
     num_questions: 0,
-    questions: []
+    questions: [],
+    sum: 0
   };
 
   componentDidMount() {
@@ -109,7 +119,6 @@ class RegularPlay extends React.Component {
     this.getNewQuestion(new_num);
   };
 
-
   render() {
     let {question_num} = this.props.match.params;
     question_num = parseInt(question_num);
@@ -129,7 +138,11 @@ class RegularPlay extends React.Component {
           <Fragment>
             <h1>{this.state.title}</h1>
             <h4>Question #{question_num+1}: {this.state.question.text}</h4>
-            {Object.keys(this.state.question).length > 0 ? <GameBoard answers={this.state.question.answers}/> :
+            <h4>Points on Board: {this.state.sum}</h4>
+            {Object.keys(this.state.question).length > 0 ?
+              <GameBoard
+                sendSumValue={(sum) => this.setState({sum})}
+                answers={this.state.question.answers}/> :
               <h4>Loading...</h4>}
           </Fragment> : <h3>Loading...</h3>}
       </div>
