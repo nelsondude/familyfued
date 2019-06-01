@@ -95,9 +95,11 @@ class RegularPlay extends React.Component {
       if (error) console.log(error);
       else {
         const data = result[0]; // single element array
+        let question = {...data.questions[parseInt(question_num)]};
+        question.answers = _.sortBy(question.answers, ['responses']).reverse();
         this.setState({
           num_questions: data.questions.length,
-          question: data.questions[parseInt(question_num)], // 0 indexing
+          question,
           title: data.title,
           questions: data.questions
         }, () => this.forceUpdate());
