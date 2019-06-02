@@ -20,22 +20,42 @@ Meteor.startup(() => {
           }
         },
         {
-          $project: {
-            title: 1,
-            question: {$arrayElemAt: ["$question", 0]}
+          $addFields: {
+            question: {$arrayElemAt: ["$question", 0]},
           }
         },
         {
           $group: {
-            _id: {_id: "$_id", title: "$title"},
+            _id: {_id: "$_id", title: "$title", fast_money: "$fast_money_questions"},
             questions: {$push: "$question"}
+          }
+        },
+        {$unwind: "$_id.fast_money"},
+        {
+          $lookup: {
+            from: 'questions',
+            localField: '_id.fast_money',
+            foreignField: '_id',
+            as: 'fast_money'
+          }
+        },
+        {
+          $addFields: {
+            fast_money: {$arrayElemAt: ["$fast_money", 0]},
+          }
+        },
+        {
+          $group: {
+            _id: {_id: "$_id._id", questions: "$questions", title: "$_id.title"},
+            fast_money: {$push: "$fast_money"}
           }
         },
         {
           $project: {
-            questions: 1,
             _id: "$_id._id",
-            title: "$_id.title"
+            title: "$_id.title",
+            fast_money: 1,
+            questions: "$_id.questions"
           }
         }
       ];

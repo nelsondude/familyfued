@@ -17,13 +17,11 @@ class GameBoard extends React.Component {
     });
   }
 
-  componentWillReceiveProps(nextProps, nextContext) {
-    if (!_.isEqual(nextProps.answers, this.props.answers)) {
-      this.setState({
-        answers: _.map(nextProps.answers, (element, i) => ({...element, show: false, index: i}))
-      });
-    }
-  }
+  // componentWillReceiveProps(nextProps, nextContext) {
+  //   if (!_.isEqual(nextProps.answers, this.props.answers)) {
+  //     this.mapAnswers();
+  //   }
+  // }
 
   toggleAnswer = (i) => {
     let new_answers = [...this.state.answers];
@@ -81,7 +79,8 @@ class RegularPlay extends React.Component {
     title: "",
     num_questions: 0,
     questions: [],
-    sum: 0
+    sum: 0,
+    key: 0
   };
 
   componentDidMount() {
@@ -91,6 +90,7 @@ class RegularPlay extends React.Component {
 
   getNewQuestion = (question_num) => {
     const {game_id} = this.props.match.params;
+    this.props.history.push(`/games/${game_id}/regular/${question_num}`);  // change address bar route
     Meteor.call('join_questions', game_id, (error, result) => {
       if (error) console.log(error);
       else {
@@ -101,29 +101,42 @@ class RegularPlay extends React.Component {
           num_questions: data.questions.length,
           question,
           title: data.title,
-          questions: data.questions
-        }, () => this.forceUpdate());
+          questions: data.questions,
+          key: this.state.key + 1,  // change key of child to remount component
+          sum: 0
+        });
       }
     });
   };
 
   nextQuestion = () => {
-    const {game_id, question_num} = this.props.match.params;
-    const new_num = parseInt(question_num) + 1;
-    this.props.history.push(`/games/${game_id}/regular/${new_num}`);
-    this.getNewQuestion(new_num);
+    const {question_num} = this.props.match.params;
+    this.getNewQuestion(parseInt(question_num) + 1);
   };
 
   previousQuestion = () => {
-    const {game_id, question_num} = this.props.match.params;
-    const new_num = parseInt(question_num) - 1;
-    this.props.history.push(`/games/${game_id}/regular/${new_num}`);
-    this.getNewQuestion(new_num);
+    const {question_num} = this.props.match.params;
+    this.getNewQuestion(parseInt(question_num) - 1);
+  };
+
+  startFastMoney = () => {
+    const {game_id} = this.props.match.params;
+    this.props.history.push(`/games/${game_id}/fast/1`);
   };
 
   render() {
     let {question_num} = this.props.match.params;
     question_num = parseInt(question_num);
+    const fast_button = (
+      <Grid container>
+        <Button
+          variant={'contained'}
+          onClick={this.startFastMoney}
+        >
+          Start Fast Money
+        </Button>
+      </Grid>
+    )
     return (
       <div className={'RegularPlay'}>
         <Grid>
@@ -143,10 +156,12 @@ class RegularPlay extends React.Component {
             <h4>Points on Board: {this.state.sum}</h4>
             {Object.keys(this.state.question).length > 0 ?
               <GameBoard
+                key={this.state.key} // new key remounts the component
                 sendSumValue={(sum) => this.setState({sum})}
                 answers={this.state.question.answers}/> :
               <h4>Loading...</h4>}
           </Fragment> : <h3>Loading...</h3>}
+        {question_num === 9 ? fast_button : null}
       </div>
     )
   }

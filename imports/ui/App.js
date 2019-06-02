@@ -7,6 +7,7 @@ import NewGameComponent from "./NewGame";
 import GamesComponent from './GamesComponent';
 import {Link} from "react-router-dom";
 import RegularPlay from "./RegularPlay";
+import FastMoney from "./FastMoney";
 
 
 class App extends React.Component {
@@ -21,6 +22,7 @@ class App extends React.Component {
             <Route path="/" exact component={GamesComponent}/>
             <Route path="/games/new" component={NewGameComponent}/>
             <Route path="/games/:game_id/regular/:question_num" component={RegularPlay}/>
+            <Route path="/games/:game_id/fast/:round_num" component={FastMoney}/>
           </Switch>
           :
           <h2>Login to Play!</h2>}
