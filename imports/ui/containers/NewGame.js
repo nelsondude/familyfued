@@ -1,10 +1,10 @@
 import React, {Fragment} from 'react';
-import TransferList from './TransferList';
-import Button from "@material-ui/core/Button";
+import TransferList from '../components/TransferList/TransferList';
+import Button from "@material-ui/core/Button/index";
 import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
-import NewQuestion from './NewQuestion';
+import NewQuestion from './NewQuestion/NewQuestion';
 import * as _ from 'lodash';
-import {Games} from "../api/links";
+import {Games} from "../../api/links";
 import { withRouter } from 'react-router-dom'
 import {Prompt} from "react-router";
 

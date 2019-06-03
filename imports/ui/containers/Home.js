@@ -1,17 +1,17 @@
 import React from 'react';
 import {withTracker} from "meteor/react-meteor-data";
-import {Games} from '../api/links';
+import {Games} from '../../api/links';
 import { Link } from 'react-router-dom'
-import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid/index";
+import Button from "@material-ui/core/Button/index";
 import {withRouter} from "react-router";
 
 
-class GamesComponent extends React.Component {
+class Home extends React.Component {
   renderGames = () => {
     return this.props.games.map((game, i) => {
       return (
-        <Grid item sm={6}>
+        <Grid item sm={6} key={i}>
           <Button onClick={() => this.props.history.push(`/games/${game._id}/regular/0`)}>{game.title}</Button>
         </Grid>
       )
@@ -37,4 +37,4 @@ export default withRouter(withTracker(() => {
   return {
     games: Games.find({user_id: Meteor.userId()}).fetch()
   }
-})(GamesComponent));
+})(Home));

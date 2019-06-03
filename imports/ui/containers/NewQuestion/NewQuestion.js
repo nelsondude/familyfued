@@ -1,14 +1,14 @@
 import React, {Fragment} from 'react';
-import Modal from '@material-ui/core/Modal';
-import Typography from '@material-ui/core/Typography';
-import Button from "@material-ui/core/Button";
+import Modal from '@material-ui/core/Modal/index';
+import Typography from '@material-ui/core/Typography/index';
+import Button from "@material-ui/core/Button/index";
 import './NewQuestion.css';
 import {TextValidator, ValidatorForm} from "react-material-ui-form-validator";
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import TextField from "@material-ui/core/TextField";
-import {Questions} from "../api/links";
+import {Questions} from "../../../api/links";
 
 
 class NewQuestion extends React.Component {

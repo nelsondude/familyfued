@@ -1,14 +1,14 @@
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
-import List from '@material-ui/core/List';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import Checkbox from '@material-ui/core/Checkbox';
-import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid/index';
+import List from '@material-ui/core/List/index';
+import ListItemIcon from '@material-ui/core/ListItemIcon/index';
+import Checkbox from '@material-ui/core/Checkbox/index';
+import Button from '@material-ui/core/Button/index';
+import Paper from '@material-ui/core/Paper/index';
 import {withTracker} from "meteor/react-meteor-data";
-import {Questions} from "../api/links";
+import {Questions} from "../../../api/links";
 import {SortableContainer, SortableElement} from 'react-sortable-hoc';
-import arrayMove from 'array-move';
+import arrayMove from 'array-move/index';
 import './TransferList.css';
 import * as _ from 'lodash';
 

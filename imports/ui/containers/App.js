@@ -1,12 +1,12 @@
 import React from 'react';
-import AccountsUIWrapper from './AccountsUIWrapper.js';
+import AccountsUIWrapper from '../components/AccountsUIWrapper.js';
 import {Meteor} from 'meteor/meteor';
 import {withTracker} from "meteor/react-meteor-data";
 import {Route, Switch} from "react-router";
 import NewGameComponent from "./NewGame";
-import GamesComponent from './GamesComponent';
+import GamesComponent from './Home';
 import {Link} from "react-router-dom";
-import RegularPlay from "./RegularPlay";
+import RegularPlay from "./RegularPlay/RegularPlay";
 import FastMoney from "./FastMoney";
 
 
