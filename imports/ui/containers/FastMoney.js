@@ -8,6 +8,7 @@ import Radio from "@material-ui/core/Radio";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormLabel from "@material-ui/core/FormLabel";
 import RadioGroup from "@material-ui/core/RadioGroup";
+import Timer from "../components/Timer";
 
 
 class FastMoney extends React.Component {
@@ -34,7 +35,6 @@ class FastMoney extends React.Component {
         data.fast_money = _.map(data.fast_money, q => (
           {...q, input: "", closest_answer: "-1"}
         )); // -1 is no close answer
-        console.log(data);
         this.setState({...data});
       }
     });
@@ -102,6 +102,7 @@ class FastMoney extends React.Component {
       <div>
         <h1>Fast Money</h1>
         <p>Click Tab to go to next input.</p>
+        <Timer count={200}/>
         <br/>
         <br/>
         {question_inputs}
