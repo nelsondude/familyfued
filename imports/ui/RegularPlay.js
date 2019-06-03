@@ -83,19 +83,25 @@ class RegularPlay extends React.Component {
     key: 0
   };
 
+  get question_num() {
+    return parseInt(this.props.match.params.question_num);
+  }
+
+  get game_id() {
+    return this.props.match.params.game_id;
+  }
+
   componentDidMount() {
-    const {question_num} = this.props.match.params;
-    this.getNewQuestion(question_num);
+    this.getNewQuestion(this.question_num);
   }
 
   getNewQuestion = (question_num) => {
-    const {game_id} = this.props.match.params;
-    this.props.history.push(`/games/${game_id}/regular/${question_num}`);  // change address bar route
-    Meteor.call('join_questions', game_id, (error, result) => {
+    this.props.history.push(`/games/${this.game_id}/regular/${question_num}`);  // change address bar route
+    Meteor.call('join_questions', this.game_id, (error, result) => {
       if (error) console.log(error);
       else {
         const data = result[0]; // single element array
-        let question = {...data.questions[parseInt(question_num)]};
+        let question = {...data.questions[question_num]};
         question.answers = _.sortBy(question.answers, ['responses']).reverse();
         this.setState({
           num_questions: data.questions.length,
@@ -110,29 +116,23 @@ class RegularPlay extends React.Component {
   };
 
   nextQuestion = () => {
-    const {question_num} = this.props.match.params;
-    this.getNewQuestion(parseInt(question_num) + 1);
+    this.getNewQuestion(this.question_num + 1);
   };
 
   previousQuestion = () => {
-    const {question_num} = this.props.match.params;
-    this.getNewQuestion(parseInt(question_num) - 1);
+    this.getNewQuestion(this.question_num - 1);
   };
 
   startFastMoney = () => {
-    const {game_id} = this.props.match.params;
-    this.props.history.push(`/games/${game_id}/fast/1`);
+    this.props.history.push(`/games/${this.game_id}/fast/1`);
   };
 
   render() {
-    let {question_num} = this.props.match.params;
-    question_num = parseInt(question_num);
     const fast_button = (
       <Grid container>
         <Button
           variant={'contained'}
-          onClick={this.startFastMoney}
-        >
+          onClick={this.startFastMoney}>
           Start Fast Money
         </Button>
       </Grid>
@@ -142,17 +142,17 @@ class RegularPlay extends React.Component {
         <Grid>
           <Button
             variant={'contained'}
-            disabled={question_num <= 0}
+            disabled={this.question_num <= 0}
             onClick={this.previousQuestion}>Previous Slide</Button>
           <Button
             variant={'contained'}
-            disabled={question_num >= this.state.num_questions - 1}
+            disabled={this.question_num >= this.state.num_questions - 1}
             onClick={this.nextQuestion}>Next Slide</Button>
         </Grid>
         {Object.keys(this.state.question).length > 0 ?
           <Fragment>
             <h1>{this.state.title}</h1>
-            <h4>Question #{question_num+1}: {this.state.question.text}</h4>
+            <h4>Question #{this.question_num+1}: {this.state.question.text}</h4>
             <h4>Points on Board: {this.state.sum}</h4>
             {Object.keys(this.state.question).length > 0 ?
               <GameBoard
@@ -161,7 +161,7 @@ class RegularPlay extends React.Component {
                 answers={this.state.question.answers}/> :
               <h4>Loading...</h4>}
           </Fragment> : <h3>Loading...</h3>}
-        {question_num === 9 ? fast_button : null}
+        {this.question_num === 9 ? fast_button : null}
       </div>
     )
   }
