@@ -10,7 +10,15 @@ class Timer extends React.Component {
     }
   }
 
-
+  componentWillReceiveProps(nextProps, nextContext) {
+    if (this.props.round_num !== nextProps.round_num) {
+      this.setState({
+        count: nextProps.count,
+        counting: false
+      })
+    }
+  }
+  
   startTimer = () => {
     this.setState({counting: true})
   };
