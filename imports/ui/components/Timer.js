@@ -17,6 +17,7 @@ class Timer extends React.Component {
 
   resetTimer = () => {
     this.pauseTimer();
+    clearInterval(this.interval);
     this.interval = this.setupInterval();
     this.setState({count: this.props.count})
   };
@@ -51,9 +52,9 @@ class Timer extends React.Component {
     return (
       <div>
         <h3>Count: {(this.state.count / 10).toFixed(1)}</h3>
-        <Button disabled={this.state.counting} onClick={this.startTimer}>Start</Button>
-        <Button disabled={!this.state.counting} onClick={this.pauseTimer}>Pause</Button>
-        <Button onClick={this.resetTimer}>Reset</Button>
+        <Button variant="outlined" disabled={this.state.counting} onClick={this.startTimer}>Start</Button>
+        <Button variant="outlined" disabled={!this.state.counting || this.state.count === 0} onClick={this.pauseTimer}>Pause</Button>
+        <Button variant="outlined" onClick={this.resetTimer}>Reset</Button>
       </div>
     );
   }

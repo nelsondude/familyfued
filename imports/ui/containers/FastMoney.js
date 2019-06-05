@@ -9,14 +9,29 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormLabel from "@material-ui/core/FormLabel";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import Timer from "../components/Timer";
+import {Button} from "@material-ui/core";
+import FastResults from "../components/FastResults";
+import Grid from "@material-ui/core/Grid";
+import {deepPurple} from "@material-ui/core/colors";
 
+const deepCopy = (data) => (
+  JSON.parse(JSON.stringify(data))
+);
 
 class FastMoney extends React.Component {
   state = {
-    fast_money: [],
-    questions: [],
-    title: "",
-    _id: ""
+    1: {
+      fast_money: [],
+      _id: "",
+      questions: [],
+      title: ""
+    },
+    2: {
+      fast_money: [],
+      _id: "",
+      questions: [],
+      title: ""
+    }
   };
 
   get game_id() {
@@ -24,7 +39,7 @@ class FastMoney extends React.Component {
   }
 
   get round_num() {
-    return this.props.match.params.round_num;
+    return parseInt(this.props.match.params.round_num);
   }
 
   getFastQuestion = () => {
@@ -35,7 +50,10 @@ class FastMoney extends React.Component {
         data.fast_money = _.map(data.fast_money, q => (
           {...q, input: "", closest_answer: "-1"}
         )); // -1 is no close answer
-        this.setState({...data});
+        this.setState({
+          1: deepCopy(data),
+          2: deepCopy(data)  // round 1 and round 2 in state
+        });
       }
     });
   };
@@ -44,20 +62,20 @@ class FastMoney extends React.Component {
     this.getFastQuestion();
   }
 
-  handleFormChange = i => event => {
-    const fast_money = [...this.state.fast_money];
-    fast_money[i].closest_answer = event.target.value;
-    this.setState({fast_money});
+  handleFormChange = (i, round) => event => {
+    const round_data = {...this.state[round]};
+    round_data.fast_money[i].closest_answer = event.target.value;
+    this.setState({[round]: round_data});
   };
 
-  renderQuestionInput = (q, index) => {
+  renderQuestionInput = (q, index, round) => {
     return (
-      <div key={index + q.text}>
+      <div key={index + q.text + round}>
         <h3>{q.text}</h3>
         <TextField
           label="Your Answer"
           value={q.input}
-          onChange={this.handleInputChange(index)}
+          onChange={this.handleInputChange(index, round)}
           margin="normal"
           autoFocus={index === 0}
         />
@@ -68,14 +86,18 @@ class FastMoney extends React.Component {
             aria-label="Gender"
             name="gender1"
             value={q.closest_answer}
-            onChange={this.handleFormChange(index)}
+            onChange={this.handleFormChange(index, round)}
           >
             {q.answers.map((answer, i) => {
                 i = i.toString();
+                const is_duplicate_answer =
+                  round === 2 &&
+                  i === this.state[1].fast_money[index].closest_answer;
                 return <FormControlLabel
-                  key={i}
+                  key={`${i}${round}`}
                   value={i}
                   control={<Radio/>}
+                  disabled={is_duplicate_answer}
                   label={`${answer.answer} | ${answer.responses}`}/>
               }
             )}
@@ -90,22 +112,51 @@ class FastMoney extends React.Component {
     )
   };
 
-  handleInputChange = i => event => {
-    const fast_money = [...this.state.fast_money];
-    fast_money[i].input = event.target.value;
-    this.setState({fast_money});
+  handleInputChange = (i, round) => event => {
+    const round_data = {...this.state[round]};
+    round_data.fast_money[i].input = event.target.value;
+    this.setState({[round]: round_data});
   };
 
   render() {
-    const question_inputs = this.state.fast_money.map((q, i) => this.renderQuestionInput(q, i));
+    const round_one = this.state[1].fast_money.map((q, i) => this.renderQuestionInput(q, i, 1));
+    const round_two = this.round_num === 2
+      ? this.state[2].fast_money.map((q, i) => this.renderQuestionInput(q, i, 2))
+      : null;
     return (
       <div>
-        <h1>Fast Money</h1>
+        {this.round_num === 1
+          ? <Button
+            variant="contained"
+            style={{float: 'right'}}
+            onClick={() => this.props.history.push(`/games/${this.game_id}/fast/2`)}>
+            Next Round
+        </Button>
+          : <Button
+            variant="contained"
+            style={{float: 'right'}}
+            onClick={() => this.props.history.push(`/games/${this.game_id}/fast/1`)}>
+            Previous Round
+          </Button>}
+        <h1>Fast Money: Round {this.round_num}</h1>
         <p>Click Tab to go to next input.</p>
         <Timer count={200}/>
+
         <br/>
         <br/>
-        {question_inputs}
+
+        <Grid container>
+          <Grid item xs={6}>
+            {round_one}
+          </Grid>
+          <Grid item xs={6}>
+            {round_two}
+          </Grid>
+        </Grid>
+        <FastResults
+          round_num={this.round_num}
+          round_two={this.round_num === 2 ? this.state[2].fast_money : []}
+          round_one={this.state[1].fast_money}/>
       </div>
     )
   }
