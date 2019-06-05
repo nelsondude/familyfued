@@ -9,14 +9,15 @@ import {Link} from "react-router-dom";
 import RegularPlay from "./RegularPlay/RegularPlay";
 import FastMoney from "./FastMoney";
 
+import './App.css';
+import Navbar from "../components/Navbar";
+
 
 class App extends React.Component {
   render() {
     return (
-      <div>
-        <AccountsUIWrapper/> &nbsp;&nbsp;
-        <Link to={'/'}>Home</Link>
-        <hr/>
+      <div className={'App'}>
+        <Navbar/>
         {this.props.currentUser ?
           <Switch>
             <Route path="/" exact component={GamesComponent}/>

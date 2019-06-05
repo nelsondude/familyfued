@@ -1,8 +1,9 @@
 .fued-result {
     background-color: transparent;
-    height: 110px;
-    border: 1px solid #f1f1f1;
+    height: 52px;
     perspective: 1000px;
+    margin: 18px 14px 27px 14px;
+    color: white;
 }
 
 
@@ -13,23 +14,51 @@
     text-align: center;
     transition: transform 0.8s;
     transform-style: preserve-3d;
+    box-shadow: 0 0 3px 4px white,
+    0 0 0 8px black,
+    0 0 3px 12px white;
+    /*box-sizing: border-box;*/
+    /*margin: 12px;*/
 }
 
 
 .panel-front {
-    background-color: #bbb;
-    color: black;
+    background: linear-gradient(
+            to bottom,
+            rgb(95, 145, 225),
+            rgb(66, 110, 210) 60%,
+            rgb(39, 72, 153) 70%,
+            rgb(39, 72, 153)
+    );
 }
 
 .panel-front h1 {
-    line-height: 68px;
+    line-height: 52px;
+    margin: 0;
+    background: radial-gradient(
+            ellipse 24px 20px,
+            rgb(23, 33, 70),
+            rgb(23, 33, 70) 90%,
+            rgb(116, 146, 228) 95%,
+            rgb(23, 33, 70),
+            transparent 30px);
 }
 
 /* Style the back side */
 .panel-back {
-    background-color: dodgerblue;
-    color: white;
+    background: linear-gradient(
+            to bottom,
+            rgb(95, 145, 225),
+            rgb(66, 110, 210) 60%,
+            rgb(39, 72, 153) 70%,
+            rgb(39, 72, 153)
+    );
     transform: rotateY(180deg) rotateZ(180deg);
+}
+
+.panel-back span {
+    line-height: 52px;
+    margin: 0;
 }
 
 .panel-front, .panel-back {
@@ -37,4 +66,32 @@
     width: 100%;
     height: 100%;
     backface-visibility: hidden;
+    padding: 0 15px;
+    box-sizing: border-box;
+    text-transform: uppercase;
+}
+
+.board {
+    width: 39%;
+    position: absolute;
+    top: 231px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.points {
+    float: right;
+}
+
+.panel-answer {
+    float: left;
+}
+
+.fued-points {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 66px;
+    top: 90px;
 }

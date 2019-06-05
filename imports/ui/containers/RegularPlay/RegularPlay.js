@@ -44,7 +44,7 @@ class GameBoard extends React.Component {
                   <h1>{answer.index + 1}</h1>
                 </div>
                 <div className="panel-back">
-                  <h1>{answer.answer} | {answer.responses}</h1>
+                  <span className={'panel-answer'}>{answer.answer}</span><span className={'points'}>{answer.responses}</span>
                 </div>
               </div>
             </div>
@@ -55,10 +55,10 @@ class GameBoard extends React.Component {
   };
 
   render() {
-    const first_five = this.state.answers.slice(0, 5);
-    const last_five = this.state.answers.slice(5, 10);
+    const first_five = this.state.answers.slice(0, 4);
+    const last_five = this.state.answers.slice(4, 8);
     return (
-      <div>
+      <div className={'board'}>
         <Grid container>
           <Grid item xs={6}>
             {this.renderPanelColumn(first_five)}
@@ -146,14 +146,17 @@ class RegularPlay extends React.Component {
             onClick={this.previousQuestion}>Previous Slide</Button>
           <Button
             variant={'contained'}
+            style={{
+              float: 'right'
+            }}
             disabled={this.question_num >= this.state.num_questions - 1}
             onClick={this.nextQuestion}>Next Slide</Button>
         </Grid>
         {Object.keys(this.state.question).length > 0 ?
           <Fragment>
-            <h1>{this.state.title}</h1>
-            <h4>Question #{this.question_num+1}: {this.state.question.text}</h4>
-            <h4>Points on Board: {this.state.sum}</h4>
+            {/*<h1>{this.state.title}</h1>*/}
+            {/*<h4>Question #{this.question_num+1}: {this.state.question.text}</h4>*/}
+            <span className={'fued-points'}>{this.state.sum}</span>
             {Object.keys(this.state.question).length > 0 ?
               <GameBoard
                 key={this.state.key} // new key remounts the component

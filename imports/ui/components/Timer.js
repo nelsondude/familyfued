@@ -18,7 +18,7 @@ class Timer extends React.Component {
       })
     }
   }
-  
+
   startTimer = () => {
     this.setState({counting: true})
   };

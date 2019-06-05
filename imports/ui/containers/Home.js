@@ -6,6 +6,11 @@ import Grid from "@material-ui/core/Grid/index";
 import Button from "@material-ui/core/Button/index";
 import {withRouter} from "react-router";
 
+const styles = {
+  home: {
+    background: 'white'
+  }
+}
 
 class Home extends React.Component {
   renderGames = () => {
@@ -21,7 +26,7 @@ class Home extends React.Component {
   render() {
     const games = this.renderGames();
     return (
-      <div>
+      <div style={styles.home}>
         {games.length > 0 ? <Grid container>{games}</Grid> : <h3>You havent created any games.</h3>}
         <Grid container>
           <Grid item xs={12}>

@@ -12,6 +12,7 @@ import Timer from "../components/Timer";
 import {Button} from "@material-ui/core";
 import FastResults from "../components/FastResults";
 import Grid from "@material-ui/core/Grid";
+import './FastMoney.css';
 import {deepPurple} from "@material-ui/core/colors";
 
 const deepCopy = (data) => (
@@ -124,7 +125,7 @@ class FastMoney extends React.Component {
       ? this.state[2].fast_money.map((q, i) => this.renderQuestionInput(q, i, 2))
       : null;
     return (
-      <div>
+      <div className={'FastMoney'}>
         {this.round_num === 1
           ? <Button
             variant="contained"
