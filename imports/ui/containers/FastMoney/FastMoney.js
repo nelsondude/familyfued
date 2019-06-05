@@ -1,19 +1,18 @@
 import React from 'react';
 import {withRouter} from "react-router";
 import {Meteor} from "meteor/meteor";
-import TextField from "@material-ui/core/TextField";
+import TextField from "@material-ui/core/TextField/index";
 import * as _ from 'lodash';
-import FormControl from "@material-ui/core/FormControl";
-import Radio from "@material-ui/core/Radio";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormLabel from "@material-ui/core/FormLabel";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import Timer from "../components/Timer";
-import {Button} from "@material-ui/core";
-import FastResults from "../components/FastResults";
-import Grid from "@material-ui/core/Grid";
+import FormControl from "@material-ui/core/FormControl/index";
+import Radio from "@material-ui/core/Radio/index";
+import FormControlLabel from "@material-ui/core/FormControlLabel/index";
+import FormLabel from "@material-ui/core/FormLabel/index";
+import RadioGroup from "@material-ui/core/RadioGroup/index";
+import {Button} from "@material-ui/core/index";
+import Grid from "@material-ui/core/Grid/index";
+import Timer from "../../components/Timer";
+import FastResults from "../../components/FastResults/FastResults";
 import './FastMoney.css';
-import {deepPurple} from "@material-ui/core/colors";
 
 const deepCopy = (data) => (
   JSON.parse(JSON.stringify(data))

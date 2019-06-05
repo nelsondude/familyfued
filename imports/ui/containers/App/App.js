@@ -1,16 +1,16 @@
 import React from 'react';
-import AccountsUIWrapper from '../components/AccountsUIWrapper.js';
+import AccountsUIWrapper from '../../components/AccountsUIWrapper.js';
 import {Meteor} from 'meteor/meteor';
 import {withTracker} from "meteor/react-meteor-data";
 import {Route, Switch} from "react-router";
-import NewGameComponent from "./NewGame";
-import GamesComponent from './Home';
+import NewGameComponent from "../NewGame";
+import GamesComponent from '../Home';
 import {Link} from "react-router-dom";
-import RegularPlay from "./RegularPlay/RegularPlay";
-import FastMoney from "./FastMoney";
+import RegularPlay from "../RegularPlay/RegularPlay";
+import FastMoney from "../FastMoney/FastMoney";
 
 import './App.css';
-import Navbar from "../components/Navbar";
+import Navbar from "../../components/Navbar";
 
 
 class App extends React.Component {

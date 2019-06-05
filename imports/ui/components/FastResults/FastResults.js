@@ -1,5 +1,5 @@
 import React, {Fragment} from 'react';
-import Grid from "@material-ui/core/Grid";
+import Grid from "@material-ui/core/Grid/index";
 import './FastResults.css';
 import {Button} from "@material-ui/core";
 import Modal from '@material-ui/core/Modal/index';
