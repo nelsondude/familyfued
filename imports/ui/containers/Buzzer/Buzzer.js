@@ -3,6 +3,14 @@ import Button from "@material-ui/core/Button";
 import {Meteor} from "meteor/meteor";
 import {withRouter} from "react-router";
 import ButtonGroup from '@material-ui/core/ButtonGroup';
+import Grid from "@material-ui/core/Grid";
+
+const styles = {
+  button: {
+    height: '180px',
+    fontSize: '50px'
+  }
+};
 
 class Buzzer extends React.Component {
   hitBuzzer = (side) => {
@@ -15,10 +23,24 @@ class Buzzer extends React.Component {
 
   render() {
     return (
-      <div>
-          <Button fullWidth variant={'contained'} color={'secondary'} onClick={this.hitBuzzer.bind(this, 'red')}>Red</Button>
-          <Button fullWidth variant={'contained'} color={'primary'} onClick={this.hitBuzzer.bind(this, 'blue')}>Blue</Button>
-      </div>
+      <Grid container spacing={3}>
+        <Grid item xs>
+          <Button
+            style={styles.button}
+            fullWidth
+            variant={'contained'}
+            color={'secondary'}
+            onClick={this.hitBuzzer.bind(this, 'red')}>Red</Button>
+        </Grid>
+        <Grid item xs>
+          <Button
+            style={styles.button}
+            fullWidth
+            variant={'contained'}
+            color={'primary'}
+            onClick={this.hitBuzzer.bind(this, 'blue')}>Blue</Button>
+        </Grid>
+      </Grid>
     );
   }
 }

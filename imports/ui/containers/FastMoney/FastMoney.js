@@ -159,7 +159,10 @@ class FastMoney extends React.Component {
           </Button>}
         <h1>Fast Money: Round {this.round_num}</h1>
         <p>Click Tab to go to next input.</p>
-        <Timer round_num={this.round_num} count={this.round_num === 1 ? 200 : 250}/>
+        <Timer
+          {...this.props}
+          round_num={this.round_num}
+          count={this.round_num === 1 ? 200 : 250}/>
 
         <br/>
         <br/>

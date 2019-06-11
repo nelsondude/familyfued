@@ -43,8 +43,12 @@ class Home extends React.Component {
     return (
       <div style={styles.home}>
         <Paper style={styles.paper}>
-          <h1>My Games</h1>
-          {games.length > 0 ? games: <h3>You havent created any games. Create one now!</h3>}
+          <Grid container spacing={6}>
+            <Grid item xs={12}>
+              <h1>My Games</h1>
+            </Grid>
+            {games.length > 0 ? games: <h3>You havent created any games. Create one now!</h3>}
+          </Grid>
         </Paper>
       </div>
     )

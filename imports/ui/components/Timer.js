@@ -39,6 +39,7 @@ class Timer extends React.Component {
       this.setState(prevState => {
         if (prevState.count === 0) {
           clearInterval(this.interval);
+          this.props.playTimesUp();
         } else if (this.state.counting) {
           return {
             count: prevState.count - 1
