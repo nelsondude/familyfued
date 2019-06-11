@@ -7,6 +7,14 @@ import * as _ from 'lodash';
 import {Games} from "../../api/links";
 import { withRouter } from 'react-router-dom'
 import {Prompt} from "react-router";
+import Paper from "@material-ui/core/Paper";
+
+const styles = {
+  paper: {
+    padding: '50px',
+    margin: '30px'
+  }
+};
 
 
 class NewGame extends React.Component {
@@ -78,7 +86,7 @@ class NewGame extends React.Component {
 
   render() {
     return (
-      <Fragment>
+      <Paper style={styles.paper}>
         <Prompt
           when={!this.formIsEmpty() && !this.formIsComplete()}
           message={location =>
@@ -86,6 +94,7 @@ class NewGame extends React.Component {
           }
         />
         <NewQuestion/>
+        <h1>New Game</h1>
         <ValidatorForm
           ref="form"
           onSubmit={this.handleSubmit}
@@ -108,9 +117,9 @@ class NewGame extends React.Component {
           <TransferList setSelected={this.handleFastChange.bind(this)}/>
           {this.state.showErrors ? <p className={"warning"}>{this.state.validation_errors.fast || ""}</p> : null}
           <br/>
-          <Button type={"submit"}>Create Game</Button>
+          <Button fullWidth variant={'contained'} color={'primary'} type={"submit"}>Create Game</Button>
         </ValidatorForm>
-      </Fragment>
+      </Paper>
     )
   }
 }

@@ -10,6 +10,15 @@ import FastMoney from "../FastMoney/FastMoney";
 import './App.css';
 import Navbar from "../../components/Navbar";
 import Buzzer from "../Buzzer/Buzzer";
+import Paper from "@material-ui/core/Paper";
+
+const styles = {
+  paper: {
+    minHeight: '400px',
+    padding: '100px',
+    marginTop: '50px'
+  }
+};
 
 const EverythingButBuzzer = (props) => (
   props.currentUser ?
@@ -18,7 +27,13 @@ const EverythingButBuzzer = (props) => (
       <Route path="/games/new" component={NewGameComponent}/>
       <Route path="/games/:game_id/regular/:question_num" component={RegularPlay}/>
       <Route path="/games/:game_id/fast/:round_num" component={FastMoney}/>
-    </Switch> : <h2>Login to Play!</h2>
+    </Switch> :
+
+    <Paper style={styles.paper}>
+      <h1>Welcome to the Family Fued Web App!</h1>
+      <h2>Login or Register to Play!</h2>
+    </Paper>
+
 );
 
 
@@ -27,11 +42,13 @@ class App extends React.Component {
     return (
       <div className={'App'}>
         <Navbar/>
-        <Switch>
-          {/*Buzzer doesnt require user to be logged in*/}
-          <Route path="/games/:game_id/buzzer" component={Buzzer}/>
-          <Route path="/" component={() => <EverythingButBuzzer {...this.props}/>}/>
-        </Switch>
+        <div className="content">
+          <Switch>
+            {/*Buzzer doesnt require user to be logged in*/}
+            <Route path="/games/:game_id/buzzer" component={Buzzer}/>
+            <Route path="/" component={() => <EverythingButBuzzer {...this.props}/>}/>
+          </Switch>
+        </div>
       </div>
     )
   }

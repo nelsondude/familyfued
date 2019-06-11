@@ -14,3 +14,13 @@ li {
 .warning {
   color: #f44336;
   font-size: 12px; }
+
+a {
+  text-decoration: none !important; }
+
+h1 {
+  font-size: 3em;
+  margin-bottom: 15px; }
+
+#modal:focus {
+  outline: none; }

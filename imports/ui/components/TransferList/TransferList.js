@@ -45,6 +45,12 @@ const SortableList = SortableContainer(({items, checked, toggle}) => {
   );
 });
 
+const styles = {
+  paper: {
+    padding: '10px'
+  }
+};
+
 class TransferList extends React.Component {
   state = {
     left: [],
@@ -116,8 +122,8 @@ class TransferList extends React.Component {
   leftList = (items) => {
     const {left, checked} = this.state;
     return (
-      <Paper style={{padding: '10px'}}>
-        <h1>My Questions ({this.state.left.length})</h1>
+      <Paper style={styles.paper}>
+        <h2>My Questions ({this.state.left.length})</h2>
         <h4>Selected: {intersection(checked, left).length}</h4>
         <SortableList items={items} onSortEnd={({oldIndex, newIndex}) => {
           this.setState(({left}) => ({
@@ -131,8 +137,8 @@ class TransferList extends React.Component {
   rightList = (items) => {
     const {right, checked} = this.state;
     return (
-      <Paper style={{padding: '10px'}}>
-        <h1>Questions in Game ({this.state.right.length})</h1>
+      <Paper style={styles.paper}>
+        <h2>Questions in Game ({this.state.right.length})</h2>
         <h4>Selected: {intersection(checked, right).length}</h4>
         <SortableList items={items} onSortEnd={({oldIndex, newIndex}) => {
           this.setState(({right}) => ({
@@ -149,49 +155,47 @@ class TransferList extends React.Component {
     const rightChecked = intersection(checked, right);
 
     return (
-      <Grid container spacing={2} justify="space-evenly" className={'TransferList'}>
-        <Grid item style={{flexGrow: 1}}>{this.leftList(left)}</Grid>
+      <Grid container spacing={3} className={'TransferList'}>
+        <Grid item xs>{this.leftList(left)}</Grid>
         <Grid item>
-          <Grid container direction="column" alignItems="center">
-            <Button
-              variant="outlined"
-              size="small"
-              onClick={this.handleAllRight}
-              disabled={left.length === 0}
-              aria-label="move all right"
-            >
-              ≫
-            </Button>
-            <Button
-              variant="outlined"
-              size="small"
-              onClick={this.handleCheckedRight}
-              disabled={leftChecked.length === 0}
-              aria-label="move selected right"
-            >
-              &gt;
-            </Button>
-            <Button
-              variant="outlined"
-              size="small"
-              onClick={this.handleCheckedLeft}
-              disabled={rightChecked.length === 0}
-              aria-label="move selected left"
-            >
-              &lt;
-            </Button>
-            <Button
-              variant="outlined"
-              size="small"
-              onClick={this.handleAllLeft}
-              disabled={right.length === 0}
-              aria-label="move all left"
-            >
-              ≪
-            </Button>
-          </Grid>
+          <Paper style={styles.paper}>
+            <Grid container direction="column" alignItems="center">
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={this.handleAllRight}
+                disabled={left.length === 0}
+                aria-label="move all right">
+                ≫
+              </Button>
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={this.handleCheckedRight}
+                disabled={leftChecked.length === 0}
+                aria-label="move selected right">
+                &gt;
+              </Button>
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={this.handleCheckedLeft}
+                disabled={rightChecked.length === 0}
+                aria-label="move selected left">
+                &lt;
+              </Button>
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={this.handleAllLeft}
+                disabled={right.length === 0}
+                aria-label="move all left">
+                ≪
+              </Button>
+            </Grid>
+          </Paper>
         </Grid>
-        <Grid item style={{flexGrow: 1}}>{this.rightList(right)}</Grid>
+        <Grid item xs>{this.rightList(right)}</Grid>
       </Grid>
     )
   }
@@ -199,6 +203,6 @@ class TransferList extends React.Component {
 
 export default withTracker(() => {
   return {
-    questions: Questions.find({}, {sort: {'updatedAt': -1}}).fetch()
+    questions: Questions.find({user_id: Meteor.userId()}, {sort: {'updatedAt': -1}}).fetch()
   }
 })(TransferList);

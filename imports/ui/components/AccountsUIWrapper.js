@@ -1,8 +1,9 @@
-
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
+import Button from "@material-ui/core/Button";
+import './AccountsUIWrapper.css';
 
 export default class AccountsUIWrapper extends Component {
   componentDidMount() {
@@ -16,6 +17,10 @@ export default class AccountsUIWrapper extends Component {
   }
   render() {
     // Just render a placeholder container that will be filled in
-    return <span ref="container" />;
+    return (
+      <Button color="inherit" className={'AccountsUIWrapper'}>
+        <span ref="container"/>
+      </Button>
+    )
   }
 }

@@ -6,14 +6,26 @@ import Grid from "@material-ui/core/Grid/index";
 import Button from "@material-ui/core/Button/index";
 import {withRouter} from "react-router";
 import withAudio from "../hoc/withAudio";
+import Paper from "@material-ui/core/Paper";
 
 const styles = {
   home: {
-    background: 'white'
+    background: 'transparent'
+  },
+  paper: {
+    padding: '30px',
+    margin: '30px',
+    // textAlign: 'center',
+    flexGrow: '1'
   }
-}
+};
 
 class Home extends React.Component {
+  constructor(props) {
+    super(props);
+    console.log(props);
+  }
+
   componentDidMount() {
     this.props.playFullTheme();
   }
@@ -22,7 +34,9 @@ class Home extends React.Component {
     return this.props.games.map((game, i) => {
       return (
         <Grid item sm={6} key={i}>
-          <Button onClick={() => this.props.history.push(`/games/${game._id}/regular/0`)}>{game.title}</Button>
+          <Paper style={styles.paper}>
+            <Button onClick={() => this.props.history.push(`/games/${game._id}/regular/0`)}>{game.title}</Button>
+          </Paper>
         </Grid>
       )
     })
@@ -32,12 +46,9 @@ class Home extends React.Component {
     const games = this.renderGames();
     return (
       <div style={styles.home}>
-        {games.length > 0 ? <Grid container>{games}</Grid> : <h3>You havent created any games.</h3>}
-        <Grid container>
-          <Grid item xs={12}>
-            <Link to={'/games/new'}>New Game</Link>
-          </Grid>
-        </Grid>
+        <Paper style={styles.paper}>
+          {games.length > 0 ? {games}: <h3>You havent created any games. Create one now!</h3>}
+        </Paper>
       </div>
     )
   }

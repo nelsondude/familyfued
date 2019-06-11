@@ -37,7 +37,10 @@ class NewQuestion extends React.Component {
       // Add validator message here
       return null;
     }
-    Questions.insert({ text: this.state.question, answers: [...this.state.responses] }, () => {
+    Questions.insert({
+      user_id: Meteor.userId(),
+      text: this.state.question,
+      answers: [...this.state.responses] }, () => {
       this.handleClose();
     });
   };
