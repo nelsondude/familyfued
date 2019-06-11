@@ -9,6 +9,7 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import TextField from "@material-ui/core/TextField";
 import {Questions} from "../../../api/links";
+import Grid from "@material-ui/core/Grid";
 
 
 class NewQuestion extends React.Component {
@@ -102,32 +103,43 @@ class NewQuestion extends React.Component {
               <br/>
               <h3>Responses</h3>
 
-              {this.state.responses.map((response, i) => {
-                return (
+              {this.state.responses.map((response, i) => (
                   <div className={'input-row'} key={i}>
-                    <TextField
-                      required
-                      id="answer"
-                      label="Required"
-                      margin="normal"
-                      value={response.answer}
-                      onChange={this.handleAnswerChange.bind(this, i)}
-                    />
-                    <TextField
-                      required
-                      type="number"
-                      id="num-responses"
-                      label="Required"
-                      margin="normal"
-                      value={response.responses}
-                      onChange={this.handleResponsesChange.bind(this, i)}
-                    />
-                    <Fab className={'remove-icon'} color="secondary" aria-label="Delete" onClick={this.removeResponse.bind(this, i)}>
-                      <DeleteIcon />
-                    </Fab>
+                    <Grid container spacing={8}>
+                      <Grid item xs>
+                        <TextField
+                          required
+                          id="answer"
+                          label="Required"
+                          margin="normal"
+                          value={response.answer}
+                          fullWidth
+                          onChange={this.handleAnswerChange.bind(this, i)}
+                        />
+                      </Grid>
+                      <Grid item xs={3}>
+                        <TextField
+                          fullWidth
+                          required
+                          type="number"
+                          id="num-responses"
+                          label="Required"
+                          margin="normal"
+                          value={response.responses}
+                          inputProps={{min: "1", max: "99", step: "1"}}
+                          onChange={this.handleResponsesChange.bind(this, i)}
+                        />
+                      </Grid>
+                      <Grid item>
+                        <Fab className={'remove-icon'} color="secondary" aria-label="Delete"
+                             onClick={this.removeResponse.bind(this, i)}>
+                          <DeleteIcon/>
+                        </Fab>
+                      </Grid>
+                    </Grid>
                   </div>
                 )
-              })}
+              )}
               <Fab color="primary" aria-label="Add" onClick={this.addResponse}>
                 <AddIcon />
               </Fab>
