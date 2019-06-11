@@ -11,22 +11,27 @@ import './App.css';
 import Navbar from "../../components/Navbar";
 import Buzzer from "../Buzzer/Buzzer";
 
+const EverythingButBuzzer = (props) => (
+  props.currentUser ?
+    <Switch>
+      <Route path="/" exact component={GamesComponent}/>
+      <Route path="/games/new" component={NewGameComponent}/>
+      <Route path="/games/:game_id/regular/:question_num" component={RegularPlay}/>
+      <Route path="/games/:game_id/fast/:round_num" component={FastMoney}/>
+    </Switch> : <h2>Login to Play!</h2>
+);
+
 
 class App extends React.Component {
   render() {
     return (
       <div className={'App'}>
         <Navbar/>
-        {this.props.currentUser ?
-          <Switch>
-            <Route path="/" exact component={GamesComponent}/>
-            <Route path="/games/new" component={NewGameComponent}/>
-            <Route path="/games/:game_id/regular/:question_num" component={RegularPlay}/>
-            <Route path="/games/:game_id/fast/:round_num" component={FastMoney}/>
-            <Route path="/games/:game_id/buzzer" component={Buzzer}/>
-          </Switch>
-          :
-          <h2>Login to Play!</h2>}
+        <Switch>
+          {/*Buzzer doesnt require user to be logged in*/}
+          <Route path="/games/:game_id/buzzer" component={Buzzer}/>
+          <Route path="/" component={() => <EverythingButBuzzer {...this.props}/>}/>
+        </Switch>
       </div>
     )
   }
