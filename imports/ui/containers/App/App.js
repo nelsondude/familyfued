@@ -9,6 +9,7 @@ import FastMoney from "../FastMoney/FastMoney";
 
 import './App.css';
 import Navbar from "../../components/Navbar";
+import Buzzer from "../Buzzer/Buzzer";
 
 
 class App extends React.Component {
@@ -22,6 +23,7 @@ class App extends React.Component {
             <Route path="/games/new" component={NewGameComponent}/>
             <Route path="/games/:game_id/regular/:question_num" component={RegularPlay}/>
             <Route path="/games/:game_id/fast/:round_num" component={FastMoney}/>
+            <Route path="/games/:game_id/buzzer" component={Buzzer}/>
           </Switch>
           :
           <h2>Login to Play!</h2>}

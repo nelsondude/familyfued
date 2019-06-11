@@ -95,3 +95,19 @@
     font-size: 66px;
     top: 90px;
 }
+
+$padding: 50px;
+
+.buzzer {
+    position: fixed;
+    left: $padding;
+    top: $padding;
+    bottom: $padding;
+    right: $padding;
+    color: white;
+    padding-top: 200px;
+    z-index: 100;
+    border-radius: 20px;
+    text-align: center;
+}
+

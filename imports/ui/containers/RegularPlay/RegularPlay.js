@@ -84,7 +84,9 @@ class RegularPlay extends React.Component {
     num_questions: 0,
     questions: [],
     sum: 0,
-    key: 0
+    key: 0,
+    buzzer_side: null,
+    can_buzz: true
   };
 
   get question_num() {
@@ -95,9 +97,28 @@ class RegularPlay extends React.Component {
     return this.props.match.params.game_id;
   }
 
+  buzz = (side) => {
+    this.setState({
+      buzzer_side: side,
+      can_buzz: false
+    }, () => {
+      this.props.playBuzzIn();
+    });
+    setTimeout(() => {
+      this.setState({can_buzz: true})
+    }, 2000)
+  };
+
   componentDidMount() {
     this.getNewQuestion(this.question_num);
     this.props.pause();
+
+    Streamy.on(this.game_id, (data) => {
+      // console.log('A broadcast message', data);
+      if (this.state.can_buzz) {
+        this.buzz(data.side)
+      }
+    });
   }
 
   getNewQuestion = (question_num) => {
@@ -141,9 +162,18 @@ class RegularPlay extends React.Component {
           Start Fast Money
         </Button>
       </Grid>
-    )
+    );
+
+    const buzzer = (
+      this.state.can_buzz ? null
+        :
+        <div className={'buzzer'} style={{background: this.state.buzzer_side}}>
+          <h1>Team {this.state.buzzer_side}</h1>
+        </div>
+    );
     return (
       <div className={'RegularPlay'}>
+        {buzzer}
         <Grid>
           <Button
             variant={'contained'}

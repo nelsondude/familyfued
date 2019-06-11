@@ -1,12 +1,12 @@
 import { Meteor } from 'meteor/meteor';
-import {Games, Questions} from '/imports/api/links';
-
-function insertLink(title, url) {
-  Links.insert({ title, url, createdAt: new Date() });
-}
+import {Games} from '/imports/api/links';
 
 Meteor.startup(() => {
   Meteor.methods({
+    buzzer(game_id, side) {
+      Streamy.broadcast(game_id, {side: side}, []);
+      return null;
+    },
     async join_questions(game_id) {
       const pipeline = [
         {$match: {_id: game_id}},
