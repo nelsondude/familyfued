@@ -14,18 +14,14 @@ const styles = {
   },
   paper: {
     padding: '30px',
-    margin: '30px',
+    // margin: '30px',
+
     // textAlign: 'center',
     flexGrow: '1'
   }
 };
 
 class Home extends React.Component {
-  constructor(props) {
-    super(props);
-    console.log(props);
-  }
-
   componentDidMount() {
     this.props.playFullTheme();
   }
@@ -47,7 +43,8 @@ class Home extends React.Component {
     return (
       <div style={styles.home}>
         <Paper style={styles.paper}>
-          {games.length > 0 ? {games}: <h3>You havent created any games. Create one now!</h3>}
+          <h1>My Games</h1>
+          {games.length > 0 ? games: <h3>You havent created any games. Create one now!</h3>}
         </Paper>
       </div>
     )

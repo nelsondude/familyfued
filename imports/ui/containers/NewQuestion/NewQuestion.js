@@ -83,21 +83,21 @@ class NewQuestion extends React.Component {
           onClose={this.handleClose}
         >
           <div id={"modal"}>
-            <Typography variant="h6" id="modal-title">
-              Create Question
-            </Typography>
+            <h1>New Question</h1>
             <ValidatorForm
               ref="form2"
               onSubmit={this.handleSubmit}
               onError={errors => console.log(errors)}
             >
               <TextValidator
+                autoFocus
                 label="Question"
                 onChange={this.handleQuestionChange}
                 name="question"
                 value={this.state.question}
                 validators={['required']}
                 errorMessages={['this field is required']}
+                fullWidth
               />
               <br/>
               <h3>Responses</h3>

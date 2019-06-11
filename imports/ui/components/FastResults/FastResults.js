@@ -10,6 +10,12 @@ import {withRouter} from "react-router";
 const LEFT_ARROW = 37;
 const RIGHT_ARROW = 39;
 
+const styles = {
+  totalPoints: {
+    float: 'right'
+  }
+};
+
 class FastResults extends React.Component {
   state = {
     round_one: [],
@@ -56,6 +62,16 @@ class FastResults extends React.Component {
 
   get show_index() {
     return this.state.show_index;
+  }
+
+  get total_points() {
+    const all_rounds = [...this.state.round_one, ...this.state.round_two];
+    return all_rounds.reduce((prev,next, i) => {
+      const selected = parseInt(next.closest_answer);
+      // Display only visible points
+      let points = (selected === -1 || (i * 2) >= this.state.show_index) ? 0 : next.answers[selected].responses;
+      return prev + points;
+    }, 0);
   }
 
   componentDidMount() {
@@ -123,8 +139,11 @@ class FastResults extends React.Component {
     //needs prop results
     return (
       <Fragment>
-        <Button onClick={this.handleOpen}>Show Results</Button>
-
+        <Button
+          variant={'contained'}
+          color={'primary'}
+          fullWidth
+          onClick={this.handleOpen}>Show Round {this.round_num} Results</Button>
         <Modal
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
@@ -160,6 +179,17 @@ class FastResults extends React.Component {
               </Grid>
               <Grid item xs={6}>
                 {this.renderRound(this.state.round_two, true)}
+              </Grid>
+            </Grid>
+            <br/>
+            <Grid container>
+              <Grid item xs={this.round_num === 1 ? 3 : 9}/>
+              <Grid item xs={3}>
+                <div className="fast-row">
+                  <div className="input-area fast-response">
+                    TOTAL <span style={styles.totalPoints}>{this.total_points}</span>
+                  </div>
+                </div>
               </Grid>
             </Grid>
           </div>

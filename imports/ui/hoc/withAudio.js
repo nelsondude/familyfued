@@ -1,12 +1,15 @@
 import React, {Fragment} from 'react';
 import ReactAudioPlayer from 'react-audio-player';
 import './withAudio.css';
+import Paper from "@material-ui/core/Paper";
+import CloseIcon from "@material-ui/icons/Close";
 
 const withAudio = (WrappedComponent) => {
 
   return class extends React.Component {
     state = {
-      song_url: "full-theme"
+      song_url: "full-theme",
+      show_player: true
     };
 
     constructor(props) {
@@ -77,6 +80,18 @@ const withAudio = (WrappedComponent) => {
       this.playAudioTrack('wrong-short');
     };
 
+    toggleShow = () => {
+      this.setState(prevState => ({show_player: !prevState.show_player}));
+    };
+
+    hidePlayer = () => {
+      this.setState({show_player: false});
+    };
+
+    showPlayer = () => {
+      this.setState({show_player: true});
+    };
+
     pause = () => {
       this.audio.pause();
     };
@@ -101,12 +116,14 @@ const withAudio = (WrappedComponent) => {
     render() {
       return (
         <Fragment>
-          <ReactAudioPlayer
-            src={'/'+this.state.song_url+'.m4a'}
-            controls
-            autoPlay
-            ref={(element) => { this.player = element; }}
-          />
+          <div className="audio-wrapper">
+            <ReactAudioPlayer
+              src={'/'+this.state.song_url+'.m4a'}
+              controls
+              autoPlay
+              ref={(element) => { this.player = element; }}
+            />
+          </div>
           <WrappedComponent
             playBuzzIn={this.playBuzzIn}
             playCommercialBreak={this.playCommercialBreak}
@@ -123,6 +140,9 @@ const withAudio = (WrappedComponent) => {
             pause={this.pause}
             toggle={this.toggle}
             restart={this.restart}
+            toggleShow={this.toggleShow}
+            hidePlayer={this.hidePlayer}
+            showPlayer={this.showPlayer}
             {...this.props} />
         </Fragment>
       );

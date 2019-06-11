@@ -107,6 +107,8 @@ class NewGame extends React.Component {
             value={this.state.title}
             validators={['required']}
             errorMessages={['this field is required']}
+            autoFocus
+            fullWidth
           />
           <h4>Regular Questions</h4>
           <TransferList setSelected={this.handleRegularChange.bind(this)}/>

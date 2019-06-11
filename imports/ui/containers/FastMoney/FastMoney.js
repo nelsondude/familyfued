@@ -14,10 +14,18 @@ import Timer from "../../components/Timer";
 import FastResults from "../../components/FastResults/FastResults";
 import './FastMoney.css';
 import withAudio from "../../hoc/withAudio";
+import Paper from "@material-ui/core/Paper";
 
 const deepCopy = (data) => (
   JSON.parse(JSON.stringify(data))
 );
+
+const styles = {
+  paper: {
+    padding: '50px',
+    margin: '30px'
+  }
+};
 
 class FastMoney extends React.Component {
   state = {
@@ -74,42 +82,51 @@ class FastMoney extends React.Component {
     return (
       <div key={index + q.text + round}>
         <h3>{q.text}</h3>
-        <TextField
-          label="Your Answer"
-          value={q.input}
-          onChange={this.handleInputChange(index, round)}
-          margin="normal"
-          autoFocus={index === 0}
-        />
-
-        <FormControl component="fieldset">
-          <FormLabel component="legend">Answers</FormLabel>
-          <RadioGroup
-            aria-label="Gender"
-            name="gender1"
-            value={q.closest_answer}
-            onChange={this.handleFormChange(index, round)}
-          >
-            {q.answers.map((answer, i) => {
-                i = i.toString();
-                const is_duplicate_answer =
-                  round === 2 &&
-                  i === this.state[1].fast_money[index].closest_answer;
-                return <FormControlLabel
-                  key={`${i}${round}`}
-                  value={i}
-                  control={<Radio/>}
-                  disabled={is_duplicate_answer}
-                  label={`${answer.answer} | ${answer.responses}`}/>
-              }
-            )}
-            <FormControlLabel
-              value={"-1"}
-              control={<Radio/>}
-              label="INCORRECT ANSWER"
+        <Grid container spacing={4}>
+          <Grid item xs>
+            <TextField
+              label="Your Answer"
+              value={q.input}
+              onChange={this.handleInputChange(index, round)}
+              margin="normal"
+              autoFocus={index === 0}
+              fullWidth
             />
-          </RadioGroup>
-        </FormControl>
+
+          </Grid>
+
+          <Grid item xs>
+
+            <FormControl component="fieldset">
+              <FormLabel component="legend">Answers</FormLabel>
+              <RadioGroup
+                aria-label="Gender"
+                name="gender1"
+                value={q.closest_answer}
+                onChange={this.handleFormChange(index, round)}
+              >
+                {q.answers.map((answer, i) => {
+                    i = i.toString();
+                    const is_duplicate_answer =
+                      round === 2 &&
+                      i === this.state[1].fast_money[index].closest_answer;
+                    return <FormControlLabel
+                      key={`${i}${round}`}
+                      value={i}
+                      control={<Radio/>}
+                      disabled={is_duplicate_answer}
+                      label={`${answer.answer} | ${answer.responses}`}/>
+                  }
+                )}
+                <FormControlLabel
+                  value={"-1"}
+                  control={<Radio/>}
+                  label="Incorrect Answer"
+                />
+              </RadioGroup>
+            </FormControl>
+          </Grid>
+        </Grid>
       </div>
     )
   };
@@ -126,14 +143,14 @@ class FastMoney extends React.Component {
       ? this.state[2].fast_money.map((q, i) => this.renderQuestionInput(q, i, 2))
       : null;
     return (
-      <div className={'FastMoney'}>
+      <Paper className={'FastMoney'} style={styles.paper}>
         {this.round_num === 1
           ? <Button
             variant="contained"
             style={{float: 'right'}}
             onClick={() => this.props.history.push(`/games/${this.game_id}/fast/2`)}>
             Next Round
-        </Button>
+          </Button>
           : <Button
             variant="contained"
             style={{float: 'right'}}
@@ -160,7 +177,7 @@ class FastMoney extends React.Component {
           round_two={this.round_num === 2 ? this.state[2].fast_money : []}
           round_one={this.state[1].fast_money}
           {...this.props}/>
-      </div>
+      </Paper>
     )
   }
 }

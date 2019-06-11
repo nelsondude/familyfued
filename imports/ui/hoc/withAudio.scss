@@ -1,5 +1,9 @@
-.react-audio-player {
+.audio-wrapper {
   position: fixed;
   bottom: 20px;
   left: 20px;
+
+  .hide {
+    left: -310px;
+  }
 }
