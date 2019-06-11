@@ -6,6 +6,10 @@ import Grid from "@material-ui/core/Grid";
 import * as _ from 'lodash';
 import Button from "@material-ui/core/Button";
 import withAudio from "../../hoc/withAudio";
+import QRCode from 'qrcode.react';
+import Fab from "@material-ui/core/Fab";
+import CloseIcon from "@material-ui/icons/Close";
+import Modal from "@material-ui/core/Modal";
 
 class GameBoard extends React.Component {
   state = {
@@ -86,7 +90,8 @@ class RegularPlay extends React.Component {
     sum: 0,
     key: 0,
     buzzer_side: null,
-    can_buzz: true
+    can_buzz: true,
+    show_question: false
   };
 
   get question_num() {
@@ -100,7 +105,8 @@ class RegularPlay extends React.Component {
   buzz = (side) => {
     this.setState({
       buzzer_side: side,
-      can_buzz: false
+      can_buzz: false,
+      show_question: false
     }, () => {
       this.props.playBuzzIn();
     });
@@ -153,6 +159,14 @@ class RegularPlay extends React.Component {
     this.props.history.push(`/games/${this.game_id}/fast/1`);
   };
 
+  showQuestion = () => {
+    this.setState({show_question: true})
+  };
+
+  hideQuestion = () => {
+    this.setState({show_question: false});
+  };
+
   render() {
     const fast_button = (
       <Grid container>
@@ -171,9 +185,41 @@ class RegularPlay extends React.Component {
           <h1>Team {this.state.buzzer_side}</h1>
         </div>
     );
+
+    const question = (
+      <Modal
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+        open={this.state.show_question}
+        onClose={this.hideQuestion}
+      >
+        <div className={'question'}>
+          <Fab color="primary" aria-label="Add" onClick={this.hideQuestion} style={{float: 'right'}}>
+            <CloseIcon/>
+          </Fab>
+
+          <h1>Question: {this.state.question.text}</h1>
+        </div>
+
+      </Modal>
+    );
+
+    const url = new URL(window.location.href);
+    const qr_url = url.origin + '/games/' + this.game_id + '/buzzer';
+    // console.log(qr_url)
+    const qrcode = (
+      <div className={'qrcode'}>
+        <a href={qr_url} target="_blank">
+          <h3>Buzzer Link</h3>
+        </a>
+        <QRCode value={qr_url} />
+      </div>
+    );
     return (
       <div className={'RegularPlay'}>
         {buzzer}
+        {qrcode}
+        {question}
         <Grid>
           <Button
             variant={'contained'}
@@ -186,6 +232,12 @@ class RegularPlay extends React.Component {
             }}
             disabled={this.question_num >= this.state.num_questions - 1}
             onClick={this.nextQuestion}>Next Slide</Button>
+          <br/>
+          <Button
+            variant={'contained'}
+            onClick={this.showQuestion}>
+            Show Question
+          </Button>
         </Grid>
         {Object.keys(this.state.question).length > 0 ?
           <Fragment>
