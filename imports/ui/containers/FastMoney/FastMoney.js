@@ -13,6 +13,7 @@ import Grid from "@material-ui/core/Grid/index";
 import Timer from "../../components/Timer";
 import FastResults from "../../components/FastResults/FastResults";
 import './FastMoney.css';
+import withAudio from "../../hoc/withAudio";
 
 const deepCopy = (data) => (
   JSON.parse(JSON.stringify(data))
@@ -60,6 +61,7 @@ class FastMoney extends React.Component {
 
   componentDidMount() {
     this.getFastQuestion();
+    this.props.pause();
   }
 
   handleFormChange = (i, round) => event => {
@@ -156,10 +158,11 @@ class FastMoney extends React.Component {
         <FastResults
           round_num={this.round_num}
           round_two={this.round_num === 2 ? this.state[2].fast_money : []}
-          round_one={this.state[1].fast_money}/>
+          round_one={this.state[1].fast_money}
+          {...this.props}/>
       </div>
     )
   }
 }
 
-export default withRouter(FastMoney);
+export default withRouter(withAudio(FastMoney));

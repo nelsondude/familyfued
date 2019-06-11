@@ -1,11 +1,9 @@
 import React from 'react';
-import AccountsUIWrapper from '../../components/AccountsUIWrapper.js';
 import {Meteor} from 'meteor/meteor';
 import {withTracker} from "meteor/react-meteor-data";
 import {Route, Switch} from "react-router";
 import NewGameComponent from "../NewGame";
 import GamesComponent from '../Home';
-import {Link} from "react-router-dom";
 import RegularPlay from "../RegularPlay/RegularPlay";
 import FastMoney from "../FastMoney/FastMoney";
 
@@ -30,7 +28,7 @@ class App extends React.Component {
       </div>
     )
   }
-};
+}
 
 export default withTracker(() => {
   return {

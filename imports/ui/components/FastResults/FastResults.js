@@ -68,9 +68,14 @@ class FastResults extends React.Component {
 
   playSoundEffect = () => {
     if (this.state.show_index % 2 === 0) {
-      // play text noise
+      this.props.playFastMoneyReveal();
     } else {
-      // play number noise "ding!!"
+      const arr = this.state.round_one.concat(this.state.round_two);
+      if (arr[Math.floor(this.state.show_index / 2)].closest_answer === '-1') {
+        this.props.playWrongShort();
+      } else {
+        this.props.playRight();
+      }
     }
   };
 

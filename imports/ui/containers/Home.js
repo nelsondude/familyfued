@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import Grid from "@material-ui/core/Grid/index";
 import Button from "@material-ui/core/Button/index";
 import {withRouter} from "react-router";
+import withAudio from "../hoc/withAudio";
 
 const styles = {
   home: {
@@ -13,6 +14,10 @@ const styles = {
 }
 
 class Home extends React.Component {
+  componentDidMount() {
+    this.props.playFullTheme();
+  }
+
   renderGames = () => {
     return this.props.games.map((game, i) => {
       return (
@@ -42,4 +47,4 @@ export default withRouter(withTracker(() => {
   return {
     games: Games.find({user_id: Meteor.userId()}).fetch()
   }
-})(Home));
+})(withAudio(Home)));

@@ -5,6 +5,7 @@ import {withRouter} from "react-router";
 import Grid from "@material-ui/core/Grid";
 import * as _ from 'lodash';
 import Button from "@material-ui/core/Button";
+import withAudio from "../../hoc/withAudio";
 
 class GameBoard extends React.Component {
   state = {
@@ -26,6 +27,9 @@ class GameBoard extends React.Component {
   toggleAnswer = (i) => {
     let new_answers = [...this.state.answers];
     new_answers[i].show = !new_answers[i].show;
+    if (new_answers[i].show) {
+      new_answers[i].index === 0 ? this.props.playNumberOne() : this.props.playRight();
+    }
     this.setState({answers: new_answers}, () => {
       const filtered = new_answers.filter(value => value.show === true);
       const summed = filtered.reduce((prev,next) => prev + next.responses,0);
@@ -93,6 +97,7 @@ class RegularPlay extends React.Component {
 
   componentDidMount() {
     this.getNewQuestion(this.question_num);
+    this.props.pause();
   }
 
   getNewQuestion = (question_num) => {
@@ -161,7 +166,9 @@ class RegularPlay extends React.Component {
               <GameBoard
                 key={this.state.key} // new key remounts the component
                 sendSumValue={(sum) => this.setState({sum})}
-                answers={this.state.question.answers}/> :
+                answers={this.state.question.answers}
+                {...this.props}
+              /> :
               <h4>Loading...</h4>}
           </Fragment> : <h3>Loading...</h3>}
         {this.question_num === 9 ? fast_button : null}
@@ -170,4 +177,4 @@ class RegularPlay extends React.Component {
   }
 }
 
-export default withRouter(RegularPlay);
+export default withRouter(withAudio(RegularPlay));
