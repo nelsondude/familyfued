@@ -3,11 +3,9 @@ import QRCode from "qrcode.react";
 
 const styles = {
   qr: {
-    position: 'fixed',
-    right: '20px',
-    bottom: '20px',
+    background: 'white',
     padding: '10px',
-    background: 'white'
+    marginTop: '10px'
   },
   h3: {
     marginTop: '0',

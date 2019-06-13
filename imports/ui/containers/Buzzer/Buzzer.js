@@ -2,7 +2,6 @@ import React from 'react';
 import Button from "@material-ui/core/Button";
 import {Meteor} from "meteor/meteor";
 import {withRouter} from "react-router";
-import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Grid from "@material-ui/core/Grid";
 
 const styles = {

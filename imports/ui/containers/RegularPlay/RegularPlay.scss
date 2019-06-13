@@ -107,3 +107,25 @@
 
 }
 
+.bottom-right-controls {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  padding: 10px;
+  color: white;
+  text-align: center;
+  span {
+    line-height: 66px;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  img {
+    height: 66px;
+    float: left;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+

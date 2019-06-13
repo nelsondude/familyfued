@@ -6,7 +6,6 @@ import './Question.css';
 
 const question = (props) => (
   <Modal
-    id={'modal'}
     open={props.show_question}
     onClose={props.hideQuestion}
   >

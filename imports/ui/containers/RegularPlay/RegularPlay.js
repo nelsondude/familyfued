@@ -7,9 +7,10 @@ import * as _ from 'lodash';
 import Button from "@material-ui/core/Button";
 import withAudio from "../../hoc/withAudio";
 import Question from './Question/Question';
-import BuzzerLink from './BuzzerLink';
+import BuzzerLink from './BuzzerLink/BuzzerLink';
 import BuzzerPopup from './BuzzerPopup/BuzzerPopup';
 import {objectEmpty} from "../../components/utils";
+import WrongAnswer from "./WrongAnswer/WrongAnswer";
 
 class GameBoard extends React.Component {
   state = {
@@ -82,7 +83,9 @@ class RegularPlay extends React.Component {
     key: 0,
     buzzer_side: null,
     can_buzz: true,
-    show_question: false
+    show_question: false,
+    wrong_answers: 0,
+    show_wrong_answer: false
   };
 
   get question_num() {
@@ -100,10 +103,10 @@ class RegularPlay extends React.Component {
       show_question: false
     }, () => {
       this.props.playBuzzIn();
+      setTimeout(() => {
+        this.setState({can_buzz: true})
+      }, 2000)
     });
-    setTimeout(() => {
-      this.setState({can_buzz: true})
-    }, 2000)
   };
 
   componentDidMount() {
@@ -131,7 +134,8 @@ class RegularPlay extends React.Component {
           title: data.title,
           questions: data.questions,
           key: this.state.key + 1,  // change key of child to remount component
-          sum: 0
+          sum: 0,
+          wrong_answers: 0
         });
       }
     });
@@ -165,12 +169,12 @@ class RegularPlay extends React.Component {
           float: 'right'
         }}
         disabled={this.question_num >= this.state.num_questions - 1}
-        onClick={this.nextQuestion}>Next Slide
+        onClick={this.nextQuestion}>Next Question
       </Button>
       {this.question_num > 0 ?
         <Button
           variant={'contained'}
-          onClick={this.previousQuestion}>Previous Slide
+          onClick={this.previousQuestion}>Previous Question
         </Button> : null}
       <Button
         variant={'contained'}
@@ -186,24 +190,50 @@ class RegularPlay extends React.Component {
     </div>
   );
 
+  wrongAnswer = () => {
+    this.setState(prevState => ({
+      wrong_answers: (prevState.wrong_answers + 1),
+      show_wrong_answer: true
+    }), () => {
+      this.props.playWrongShort();
+      setTimeout(() => {
+        this.setState({show_wrong_answer: false})
+      }, 2000)
+    })
+  };
+
+  clear = () => {
+    this.setState({wrong_answers: 0});
+  };
+
   render() {
+    const {can_buzz, buzzer_side, wrong_answers, question, show_question, sum, key, show_wrong_answer} = this.state;
     return (
       <div className={'RegularPlay'}>
         <BuzzerPopup
-          can_buzz={this.state.can_buzz}
-          buzzer_side={this.state.buzzer_side}/>
-        <BuzzerLink game_id={this.game_id}/>
+          can_buzz={can_buzz}
+          buzzer_side={buzzer_side}/>
+        <WrongAnswer
+          show_wrong_answer={show_wrong_answer}
+          wrong_answers={wrong_answers}/>
+        <div className="bottom-right-controls">
+          <div className="wrong-controls">
+            <img src="/ffx.png" alt="" onClick={this.wrongAnswer}/>
+            <span onClick={this.clear}>CLEAR X's</span>
+          </div>
+          <BuzzerLink game_id={this.game_id}/>
+        </div>
         <Question
-          question={this.state.question}
+          question={question}
           hideQuestion={this.hideQuestion}
-          show_question={this.state.show_question}/>
+          show_question={show_question}/>
         {this.renderSlideQuestions()}
-        <span className={'fued-points'}>{this.state.sum}</span>
-        {!objectEmpty(this.state.question) ?
+        <span className={'fued-points'}>{sum}</span>
+        {!objectEmpty(question) ?
           <GameBoard
-            key={this.state.key} // new key remounts the component
+            key={key} // new key remounts the component
             sendSumValue={(sum) => this.setState({sum})}
-            answers={this.state.question.answers}
+            answers={question.answers}
             {...this.props}
           /> :
           <h4>Loading...</h4>}
