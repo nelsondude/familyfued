@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React from 'react';
 import Grid from "@material-ui/core/Grid/index";
 import './FastResults.css';
 import {Button} from "@material-ui/core";
@@ -20,7 +20,6 @@ class FastResults extends React.Component {
   state = {
     round_one: [],
     round_two: [],
-    show_results: false,
     show_index: -1
   };
 
@@ -28,7 +27,6 @@ class FastResults extends React.Component {
     round.map((response, i) => {
       const selected = parseInt(response.closest_answer);
       let points = selected === -1 ? 0 : response.answers[selected].responses;
-      // const input = padSpaces(response.input, 15);
       const input_index = (i * 2) + (is_round_two ? 10 : 0);
       const points_index = input_index + 1;
 
@@ -36,9 +34,6 @@ class FastResults extends React.Component {
       const show_points = points_index <= this.show_index;
 
       const classes = ["black-bar"];
-      if (show_input) {
-        // classes.push("collapse");
-      }
       if (show_points) {
         classes.push("hide")
       }
@@ -51,10 +46,10 @@ class FastResults extends React.Component {
           <div className='fast-points input-area' style={{color: show_points ? 'white' : 'black'}}>
             {points}
           </div>
-          {show_input ? <div className="black-container">
-            <div className={classes.join(" ")}>
-            </div>
-          </div> : null}
+          {show_input ?
+            <div className="black-container">
+              <div className={classes.join(" ")}/>
+            </div> : null}
         </div>
       )
     })
@@ -66,7 +61,7 @@ class FastResults extends React.Component {
 
   get total_points() {
     const all_rounds = [...this.state.round_one, ...this.state.round_two];
-    return all_rounds.reduce((prev,next, i) => {
+    return all_rounds.reduce((prev, next, i) => {
       const selected = parseInt(next.closest_answer);
       // Display only visible points
       let points = (selected === -1 || (i * 2) >= this.state.show_index) ? 0 : next.answers[selected].responses;
@@ -96,7 +91,7 @@ class FastResults extends React.Component {
   };
 
   handleKeyPress = event => {
-    if (!this.state.show_results) return;
+    if (!this.props.show_results) return;
     if (event.keyCode === LEFT_ARROW) {
       if (this.state.show_index > -1) {
         this.setState(state => ({show_index: state.show_index - 1}))
@@ -113,19 +108,12 @@ class FastResults extends React.Component {
       round_one: nextProps.round_one || [],
       round_two: nextProps.round_two || []
     };
-    if (this.props.round_num !== nextProps.round_num) {
-      data.show_index = nextProps.round_num === 1 ? -1 : 9;
+    const next_round_num = parseInt(nextProps.match.params.round_num);
+    if (this.round_num !== next_round_num) {
+      data.show_index = next_round_num === 1 ? -1 : 9;
     }
     this.setState(data);
   }
-
-  handleOpen = () => {
-    this.setState({show_results: true})
-  };
-
-  handleClose = () => {
-    this.setState({show_results: false})
-  };
 
   get game_id() {
     return this.props.match.params.game_id;
@@ -136,65 +124,54 @@ class FastResults extends React.Component {
   }
 
   render() {
-    //needs prop results
     return (
-      <Fragment>
-        <Button
-          variant={'contained'}
-          color={'primary'}
-          fullWidth
-          onClick={this.handleOpen}>Show Round {this.round_num} Results</Button>
-        <Modal
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
-          open={this.state.show_results}
-          onClose={this.handleClose}
-        >
-          <div className={'FastResults'}>
-            <div>
-              <Fab color="primary" aria-label="Add" onClick={this.handleClose} style={{float: 'right'}}>
-                <CloseIcon/>
-              </Fab>
-              {this.props.round_num === 1
-                ?
-                <Button
-                  variant="contained" color="primary"
-                  onClick={() => {
-                    this.props.history.push(`/games/${this.game_id}/fast/2`);
-                    this.handleClose();
-                  }}>
-                  Next Round
-                </Button>
-                : null}
+      <Modal
+        open={this.props.show_results}
+        onClose={this.props.handleClose}>
+        <div className={'FastResults'}>
+          <div>
+            <Fab color="primary" aria-label="Add" onClick={this.props.handleClose} style={{float: 'right'}}>
+              <CloseIcon/>
+            </Fab>
+            {this.round_num === 1
+              ?
+              <Button
+                variant="contained" color="primary"
+                onClick={() => {
+                  this.props.history.push(`/games/${this.game_id}/fast/2`);
+                  this.props.handleClose();
+                }}>
+                Next Round
+              </Button>
+              : null}
 
-              <h1>Fast Money Results</h1>
-              <h3>Round #{this.props.round_num}</h3>
-              <p>
-                Hit Right and Left Arrow keys to reveal answers.
-              </p>
-            </div>
-            <Grid container>
-              <Grid item xs={6}>
-                {this.renderRound(this.state.round_one)}
-              </Grid>
-              <Grid item xs={6}>
-                {this.renderRound(this.state.round_two, true)}
-              </Grid>
-            </Grid>
-            <br/>
-            <Grid container>
-              <Grid item xs={this.round_num === 1 ? 3 : 9}/>
-              <Grid item xs={3}>
-                <div className="fast-row">
-                  <div className="input-area fast-response">
-                    TOTAL <span style={styles.totalPoints}>{this.total_points}</span>
-                  </div>
-                </div>
-              </Grid>
-            </Grid>
+            <h1>Fast Money Results</h1>
+            <h3>Round #{this.round_num}</h3>
+            <p>
+              Hit Right and Left Arrow keys to reveal answers.
+            </p>
           </div>
-        </Modal>
-      </Fragment>
+          <Grid container>
+            <Grid item xs={6}>
+              {this.renderRound(this.state.round_one)}
+            </Grid>
+            <Grid item xs={6}>
+              {this.renderRound(this.state.round_two, true)}
+            </Grid>
+          </Grid>
+          <br/>
+          <Grid container>
+            <Grid item xs={this.round_num === 1 ? 3 : 9}/>
+            <Grid item xs={3}>
+              <div className="fast-row">
+                <div className="input-area fast-response">
+                  TOTAL <span style={styles.totalPoints}>{this.total_points}</span>
+                </div>
+              </div>
+            </Grid>
+          </Grid>
+        </div>
+      </Modal>
     );
   }
 }

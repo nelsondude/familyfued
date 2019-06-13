@@ -10,40 +10,31 @@ import {Questions} from "../../../api/links";
 import {SortableContainer, SortableElement} from 'react-sortable-hoc';
 import arrayMove from 'array-move/index';
 import './TransferList.css';
-import * as _ from 'lodash';
+import {intersection, not} from '../utils';
 
-function not(a, b) {
-  b = _.map(b, '_id');
-  return a.filter(value => b.indexOf(value._id) === -1);
-}
-
-function intersection(a, b) {
-  b = _.map(b, '_id');
-  return a.filter(value => b.indexOf(value._id) !== -1);
-}
 
 const SortableItem = SortableElement(({value, checked, toggle}) =>
   <li>
     <ListItemIcon>
-      <Checkbox checked={checked.indexOf(value) !== -1} tabIndex={-1} disableRipple
-                onClick={() => toggle(value)}/>
+      <Checkbox
+        checked={checked.indexOf(value) !== -1}
+        tabIndex={-1}
+        disableRipple
+        onClick={() => toggle(value)}/>
     </ListItemIcon>
     <span className={'itemtext'}>
-
-    {value.text}
+      {value.text}
     </span>
   </li>
 );
 
-const SortableList = SortableContainer(({items, checked, toggle}) => {
-  return (
-    <List dense className={'scrolling-list'}>
-      {items.map((value, index) => (
-        <SortableItem key={`item-${index}`} index={index} value={value} checked={checked} toggle={toggle}/>
-      ))}
-    </List>
-  );
-});
+const SortableList = SortableContainer(({items, checked, toggle}) =>
+  <List dense className={'scrolling-list'}>
+    {items.map((value, index) => (
+      <SortableItem key={`item-${index}`} index={index} value={value} checked={checked} toggle={toggle}/>
+    ))}
+  </List>
+);
 
 const styles = {
   paper: {
@@ -65,7 +56,7 @@ class TransferList extends React.Component {
   componentWillReceiveProps(nextProps, nextContext) {
     if (nextProps.questions.length !== this.state.left.length + this.state.right.length) {
       let new_questions = not(nextProps.questions, [...this.state.left, ...this.state.right]);
-      this.setState({left: [...new_questions.reverse(), ...this.state.left, ]});
+      this.setState({left: [...new_questions.reverse(), ...this.state.left,]});
     }
   }
 
@@ -87,7 +78,7 @@ class TransferList extends React.Component {
     this.setState({
       right: right.concat(left),
       left: []
-    }, this.props.setSelected(right.concat(left)))
+    }, this.props.setSelected([...right, ...left]))
   };
 
   handleCheckedRight = () => {
@@ -97,7 +88,7 @@ class TransferList extends React.Component {
       right: right.concat(leftChecked),
       left: not(left, leftChecked),
       checked: not(checked, leftChecked)
-    }, this.props.setSelected(right.concat(leftChecked)));
+    }, this.props.setSelected([...right, ...leftChecked]));
   };
 
   handleCheckedLeft = () => {

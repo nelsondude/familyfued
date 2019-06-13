@@ -1,6 +1,5 @@
 import React, {Fragment} from 'react';
 import Modal from '@material-ui/core/Modal/index';
-import Typography from '@material-ui/core/Typography/index';
 import Button from "@material-ui/core/Button/index";
 import './NewQuestion.css';
 import {TextValidator, ValidatorForm} from "react-material-ui-form-validator";
@@ -18,7 +17,6 @@ class NewQuestion extends React.Component {
     question: "",
     responses: []
   };
-
 
   handleOpen = () => {
     this.setState({open: true})

@@ -1,7 +1,6 @@
 import React from 'react';
 import {withTracker} from "meteor/react-meteor-data";
 import {Games} from '../../api/links';
-import { Link } from 'react-router-dom'
 import Grid from "@material-ui/core/Grid/index";
 import Button from "@material-ui/core/Button/index";
 import {withRouter} from "react-router";
@@ -14,9 +13,6 @@ const styles = {
   },
   paper: {
     padding: '30px',
-    // margin: '30px',
-
-    // textAlign: 'center',
     flexGrow: '1'
   }
 };

@@ -40,7 +40,8 @@ class FastMoney extends React.Component {
       _id: "",
       questions: [],
       title: ""
-    }
+    },
+    show_results: false
   };
 
   get game_id() {
@@ -137,6 +138,14 @@ class FastMoney extends React.Component {
     this.setState({[round]: round_data});
   };
 
+  handleOpen = () => {
+    this.setState({show_results: true})
+  };
+
+  handleClose = () => {
+    this.setState({show_results: false})
+  };
+
   render() {
     const round_one = this.state[1].fast_money.map((q, i) => this.renderQuestionInput(q, i, 1));
     const round_two = this.round_num === 2
@@ -175,10 +184,18 @@ class FastMoney extends React.Component {
             {round_two}
           </Grid>
         </Grid>
+        <Button
+          variant={'contained'}
+          color={'primary'}
+          fullWidth
+          onClick={this.handleOpen}>Show Round {this.round_num} Results</Button>
+
         <FastResults
-          round_num={this.round_num}
+          handleClose={this.handleClose}
+          show_results={this.state.show_results}
           round_two={this.round_num === 2 ? this.state[2].fast_money : []}
           round_one={this.state[1].fast_money}
+
           {...this.props}/>
       </Paper>
     )

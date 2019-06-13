@@ -1,13 +1,14 @@
-import React, {Fragment} from 'react';
+import React from 'react';
 import TransferList from '../components/TransferList/TransferList';
 import Button from "@material-ui/core/Button/index";
-import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
+import {TextValidator, ValidatorForm} from 'react-material-ui-form-validator';
 import NewQuestion from './NewQuestion/NewQuestion';
 import * as _ from 'lodash';
 import {Games} from "../../api/links";
-import { withRouter } from 'react-router-dom'
+import {withRouter} from 'react-router-dom'
 import {Prompt} from "react-router";
 import Paper from "@material-ui/core/Paper";
+import {objectEmpty} from "../components/utils";
 
 const styles = {
   paper: {
@@ -39,7 +40,7 @@ class NewGame extends React.Component {
   formIsComplete = () => {
     const {title, regular_questions, fast_money_questions} = this.state;
     return (title && regular_questions.length === 10 && fast_money_questions.length === 5);
-  }
+  };
 
   validateForm = () => {
     this.setState({validation_errors: {}}, () => {
@@ -64,7 +65,8 @@ class NewGame extends React.Component {
     if (event) event.preventDefault();
     this.validateForm();
     this.setState({showErrors: true});
-    if (Object.keys(this.state.validation_errors).length > 0) return null;
+    if (!objectEmpty(this.state.validation_errors)) return null;
+
     // continue submitting the form
     Games.insert({
       user_id: Meteor.userId(),
@@ -89,7 +91,7 @@ class NewGame extends React.Component {
       <Paper style={styles.paper}>
         <Prompt
           when={!this.formIsEmpty() && !this.formIsComplete()}
-          message={location =>
+          message={_ =>
             `You have started a game. Are you sure you want to leave?`
           }
         />
