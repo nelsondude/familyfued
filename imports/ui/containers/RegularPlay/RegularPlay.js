@@ -267,7 +267,7 @@ class RegularPlay extends React.Component {
           <h1>{this.blue_points}</h1>
           <h4>Previous Round: {this.blue_points_previous}</h4>
         </div>
-        
+
         <BuzzerPopup
           can_buzz={can_buzz}
           buzzer_side={buzzer_side}/>
