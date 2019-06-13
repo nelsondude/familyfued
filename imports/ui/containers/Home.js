@@ -27,7 +27,9 @@ class Home extends React.Component {
       return (
         <Grid item sm={6} key={i}>
           <Paper style={styles.paper}>
-            <Button onClick={() => this.props.history.push(`/games/${game._id}/regular/0`)}>{game.title}</Button>
+            <Button onClick={() => {
+              localStorage.removeItem(game._id);
+              this.props.history.push(`/games/${game._id}/regular/0`)}}>{game.title}</Button>
           </Paper>
         </Grid>
       )

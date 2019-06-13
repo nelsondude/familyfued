@@ -43,7 +43,7 @@ class GameBoard extends React.Component {
           <div className="fued-result" onClick={this.toggleAnswer.bind(this, answer.index)}>
             <div className="flip-panel" style={{transform: answer.show ? "rotateX(180deg)" : "rotateX(0)"}}>
               <div className="panel-front">
-                <h1>{answer.index + 1}</h1>
+                <h2>{answer.index + 1}</h2>
               </div>
               <div className="panel-back">
                 <span className={'panel-answer'}>{answer.answer}</span><span
@@ -85,7 +85,8 @@ class RegularPlay extends React.Component {
     can_buzz: true,
     show_question: false,
     wrong_answers: 0,
-    show_wrong_answer: false
+    show_wrong_answer: false,
+    include_current_round: false
   };
 
   get question_num() {
@@ -120,6 +121,30 @@ class RegularPlay extends React.Component {
     });
   }
 
+  sum_points = (team, question_num) => {
+    const game = JSON.parse(localStorage.getItem(this.game_id));
+    if (!game) return 0;
+    return game
+      .filter((o, i) => o.team === team && i <= question_num)
+      .reduce((prev, next) => prev + next.points, 0)
+  };
+
+  get red_points() {
+    return this.sum_points('red', this.question_num - (+ !this.state.include_current_round));
+  }
+
+  get red_points_previous() {
+    return this.sum_points('red', this.question_num - 1);
+  }
+
+  get blue_points() {
+    return this.sum_points('blue', this.question_num - (this.state.include_current_round ? 0 : 1));
+  }
+
+  get blue_points_previous() {
+    return this.sum_points('blue', this.question_num - 1);
+  }
+
   getNewQuestion = (question_num) => {
     this.props.history.push(`/games/${this.game_id}/regular/${question_num}`);  // change address bar route
     Meteor.call('join_questions', this.game_id, (error, result) => {
@@ -135,7 +160,8 @@ class RegularPlay extends React.Component {
           questions: data.questions,
           key: this.state.key + 1,  // change key of child to remount component
           sum: 0,
-          wrong_answers: 0
+          wrong_answers: 0,
+          include_current_round: false
         });
       }
     });
@@ -206,16 +232,46 @@ class RegularPlay extends React.Component {
     this.setState({wrong_answers: 0});
   };
 
+  addPoints = (team) => {
+    let game = JSON.parse(localStorage.getItem(this.game_id));
+    if (!game) {
+      game = new Array(10).fill({});
+    }
+    game[this.question_num] = {
+      team,
+      points: this.state.sum
+    };
+    localStorage.setItem(this.game_id, JSON.stringify([...game]));
+    this.setState({include_current_round: true}, () => {
+      this.forceUpdate();
+    });
+  };
+
   render() {
     const {can_buzz, buzzer_side, wrong_answers, question, show_question, sum, key, show_wrong_answer} = this.state;
     return (
       <div className={'RegularPlay'}>
+        <div className="team-points team-red">
+          <Button variant={'contained'} onClick={this.addPoints.bind(this, 'red')}>Add Points to Red</Button>
+          <h1>{this.red_points}</h1>
+          <h4>Previous Round: {this.red_points_previous}</h4>
+        </div>
+        <div className="team-points team-blue">
+          <Button variant={'contained'} onClick={this.addPoints.bind(this, 'blue')}>Add Points to Blue</Button>
+          <h1>{this.blue_points}</h1>
+          <h4>Previous Round: {this.blue_points_previous}</h4>
+        </div>
+
+
+
         <BuzzerPopup
           can_buzz={can_buzz}
           buzzer_side={buzzer_side}/>
         <WrongAnswer
           show_wrong_answer={show_wrong_answer}
           wrong_answers={wrong_answers}/>
+
+
         <div className="bottom-right-controls">
           <div className="wrong-controls">
             <img src="/ffx.png" alt="" onClick={this.wrongAnswer}/>
