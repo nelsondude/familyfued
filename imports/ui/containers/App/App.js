@@ -11,6 +11,7 @@ import './App.css';
 import Navbar from "../../components/Navbar";
 import Buzzer from "../Buzzer/Buzzer";
 import Paper from "@material-ui/core/Paper";
+import HowToPlay from "../HowToPlay";
 
 const styles = {
   paper: {
@@ -52,6 +53,7 @@ class App extends React.Component {
         <Navbar/>
         <div className="content">
           <Switch>
+            <Route path="/how-to-play" component={HowToPlay}/>
             {/*Buzzer doesnt require user to be logged in*/}
             <Route path="/games/:game_id/buzzer" component={Buzzer}/>
             <Route path="/" component={() => <EverythingButBuzzer {...this.props}/>}/>

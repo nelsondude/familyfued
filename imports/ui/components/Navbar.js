@@ -37,6 +37,11 @@ export default () => {
                   New Game
                 </Button>
               </Link>
+              <Link to={'/how-to-play'} className={classes.link}>
+                <Button color={'inherit'}>
+                  How To Play
+                </Button>
+              </Link>
             </Grid>
 
             <Grid item>

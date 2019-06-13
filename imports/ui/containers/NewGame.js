@@ -112,12 +112,12 @@ class NewGame extends React.Component {
             autoFocus
             fullWidth
           />
-          <h4>Regular Questions</h4>
+          <h4>Regular Questions <small>(10 are required)</small></h4>
           <TransferList setSelected={this.handleRegularChange.bind(this)}/>
           {this.state.showErrors ? <p className={"warning"}>{this.state.validation_errors.regular || ""}</p> : null}
           <br/>
 
-          <h4>Fast Money Questions (must be 5)</h4>
+          <h4>Fast Money Questions (5 are required)</h4>
           <TransferList setSelected={this.handleFastChange.bind(this)}/>
           {this.state.showErrors ? <p className={"warning"}>{this.state.validation_errors.fast || ""}</p> : null}
           <br/>
