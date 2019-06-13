@@ -252,18 +252,22 @@ class RegularPlay extends React.Component {
     return (
       <div className={'RegularPlay'}>
         <div className="team-points team-red">
-          <Button variant={'contained'} onClick={this.addPoints.bind(this, 'red')}>Add Points to Red</Button>
+          <Button
+            color={'secondary'}
+            variant={'contained'}
+            onClick={this.addPoints.bind(this, 'red')}>Add Points to Red</Button>
           <h1>{this.red_points}</h1>
           <h4>Previous Round: {this.red_points_previous}</h4>
         </div>
         <div className="team-points team-blue">
-          <Button variant={'contained'} onClick={this.addPoints.bind(this, 'blue')}>Add Points to Blue</Button>
+          <Button
+            color={'primary'}
+            variant={'contained'}
+            onClick={this.addPoints.bind(this, 'blue')}>Add Points to Blue</Button>
           <h1>{this.blue_points}</h1>
           <h4>Previous Round: {this.blue_points_previous}</h4>
         </div>
-
-
-
+        
         <BuzzerPopup
           can_buzz={can_buzz}
           buzzer_side={buzzer_side}/>
