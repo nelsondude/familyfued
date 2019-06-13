@@ -130,7 +130,7 @@ class RegularPlay extends React.Component {
   };
 
   get red_points() {
-    return this.sum_points('red', this.question_num - (+ !this.state.include_current_round));
+    return this.sum_points('red', this.question_num - (+!this.state.include_current_round));
   }
 
   get red_points_previous() {
@@ -287,6 +287,8 @@ class RegularPlay extends React.Component {
           question={question}
           hideQuestion={this.hideQuestion}
           show_question={show_question}/>
+
+        <h2 style={{marginTop: 0}}>Question {this.question_num + 1}</h2>
         {this.renderSlideQuestions()}
         <span className={'fued-points'}>{sum}</span>
         {!objectEmpty(question) ?
