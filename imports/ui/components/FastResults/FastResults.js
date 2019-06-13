@@ -12,7 +12,8 @@ const RIGHT_ARROW = 39;
 
 const styles = {
   totalPoints: {
-    float: 'right'
+    float: 'right',
+    display: 'inline-block',
   }
 };
 
@@ -41,10 +42,10 @@ class FastResults extends React.Component {
       return (
         <div className='fast-row' key={response._id + i}>
           <div className='fast-response input-area' style={{color: show_input ? 'white' : 'black'}}>
-            {response.input}
+            <span>{response.input}</span>
           </div>
           <div className='fast-points input-area' style={{color: show_points ? 'white' : 'black'}}>
-            {points}
+            <span>{points}</span>
           </div>
           {show_input ?
             <div className="black-container">
@@ -97,7 +98,7 @@ class FastResults extends React.Component {
         this.setState(state => ({show_index: state.show_index - 1}))
       }
     } else if (event.keyCode === RIGHT_ARROW) {
-      if (this.state.show_index < 19) {
+      if (this.state.show_index < (this.state.round_one.length + this.state.round_two.length)*2 - 1) {
         this.setState(state => ({show_index: state.show_index + 1}), this.playSoundEffect)
       }
     }
@@ -165,7 +166,8 @@ class FastResults extends React.Component {
             <Grid item xs={3}>
               <div className="fast-row">
                 <div className="input-area fast-response">
-                  TOTAL <span style={styles.totalPoints}>{this.total_points}</span>
+                  <span>TOTAL</span>
+                  <span style={styles.totalPoints}>{this.total_points}</span>
                 </div>
               </div>
             </Grid>
